@@ -1,0 +1,23 @@
+package com.chefscorner.recipe.controller;
+
+import com.chefscorner.recipe.dto.RecipeDto;
+import com.chefscorner.recipe.service.RecipeService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("api/v1/recipe")
+public class RecipeController {
+
+    private final RecipeService recipeService;
+
+    @GetMapping("/{id}")
+    public RecipeDto recipeByid(@PathVariable("id") Integer id){
+        return recipeService.getRecipeById(id);
+    }
+}
