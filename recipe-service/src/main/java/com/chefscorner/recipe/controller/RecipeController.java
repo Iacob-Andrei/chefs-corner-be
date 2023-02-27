@@ -17,7 +17,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping("/{id}")
-    public RecipeDto recipeByid(@PathVariable("id") Integer id){
+    public RecipeDto recipeByidWithImage(@PathVariable("id") Integer id){
         return recipeService.getRecipeById(id);
     }
 }

@@ -21,4 +21,5 @@ public class Recipe {
     private Integer prep_time;
     private Integer cook_time;
     private Integer number_servings;
+    private String image;
 }

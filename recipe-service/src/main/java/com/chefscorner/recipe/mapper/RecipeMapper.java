@@ -12,6 +12,7 @@ public class RecipeMapper {
                 .prep_time(recipe.getPrep_time())
                 .cook_time(recipe.getCook_time())
                 .number_servings(recipe.getNumber_servings())
+                .image(recipe.getImage())
                 .build();
     }
 }
