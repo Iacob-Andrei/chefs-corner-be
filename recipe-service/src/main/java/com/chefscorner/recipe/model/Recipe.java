@@ -6,12 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="recipes")
+@Table(name= "recipe")
 public class Recipe {
 
     @Id
@@ -22,4 +25,19 @@ public class Recipe {
     private Integer cook_time;
     private Integer number_servings;
     private String image;
+    @OneToMany(
+            mappedBy = "recipe",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Direction> directions = new ArrayList<>();
+
+    public Recipe(Integer id, String name, Integer prep_time, Integer cook_time, Integer number_servings, String image) {
+        this.id = id;
+        this.name = name;
+        this.prep_time = prep_time;
+        this.cook_time = cook_time;
+        this.number_servings = number_servings;
+        this.image = image;
+    }
 }

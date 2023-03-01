@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -17,4 +19,5 @@ public class RecipeDto {
     private Integer cook_time;
     private Integer number_servings;
     private String image;
+    private List<DirectionDto> directions;
 }
