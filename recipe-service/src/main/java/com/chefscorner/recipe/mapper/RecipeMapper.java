@@ -1,13 +1,15 @@
 package com.chefscorner.recipe.mapper;
 
 import com.chefscorner.recipe.dto.RecipeDto;
+import com.chefscorner.recipe.model.IngredientToRecipe;
 import com.chefscorner.recipe.model.Recipe;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class RecipeMapper {
 
-    public static RecipeDto recipeToRecipeDto(Recipe recipe) {
+    public static RecipeDto recipeToRecipeDto(Recipe recipe, List<IngredientToRecipe> ingredients) {
         return RecipeDto.builder()
                 .id(recipe.getId())
                 .name(recipe.getName())
@@ -17,6 +19,9 @@ public class RecipeMapper {
                 .image(recipe.getImage())
                 .directions(recipe.getDirections().stream()
                             .map(DirectionMapper::directionToDirectionDto)
+                            .collect(Collectors.toList()))
+                .ingredients(ingredients.stream()
+                            .map(IngredientToRecipeMapper::ingredientToRecipeToIngredientToRecipeDto)
                             .collect(Collectors.toList()))
                 .build();
     }
