@@ -20,5 +20,6 @@ public class RecipeDto {
     private Integer number_servings;
     private String image;
     private List<DirectionDto> directions;
+    private List<CategoryDto> categories;
     private List<IngredientToRecipeDto> ingredients;
 }

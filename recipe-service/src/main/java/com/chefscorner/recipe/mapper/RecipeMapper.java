@@ -23,6 +23,9 @@ public class RecipeMapper {
                 .ingredients(ingredients.stream()
                             .map(IngredientToRecipeMapper::ingredientToRecipeToIngredientToRecipeDto)
                             .collect(Collectors.toList()))
+                .categories(recipe.getCategories().stream()
+                            .map(CategoryMapper::categoryToCategoryDto)
+                            .collect(Collectors.toList()))
                 .build();
     }
 }
