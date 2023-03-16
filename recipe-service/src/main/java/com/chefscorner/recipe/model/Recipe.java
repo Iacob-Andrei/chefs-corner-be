@@ -32,6 +32,13 @@ public class Recipe {
     )
     private List<Direction> directions = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "recipe",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Category> categories = new ArrayList<>();
+
     public Recipe(Integer id, String name, Integer prep_time, Integer cook_time, Integer number_servings, String image) {
         this.id = id;
         this.name = name;

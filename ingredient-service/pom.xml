@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>recipe-service</artifactId>
+    <artifactId>ingredient-service</artifactId>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -30,11 +30,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>
