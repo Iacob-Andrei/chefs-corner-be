@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class RecipeMapper {
 
+
     public static RecipeDto recipeToRecipeDto(Recipe recipe, List<IngredientToRecipe> ingredients) {
         return RecipeDto.builder()
                 .id(recipe.getId())

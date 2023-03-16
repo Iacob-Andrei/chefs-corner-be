@@ -13,6 +13,7 @@
   <modules>
     <module>recipe-service</module>
       <module>ingredient-service</module>
+
   </modules>
 
   <properties>
