@@ -21,13 +21,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class RecipeService {
     private final RecipeRepository recipeRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public RecipeDto getRecipeById(Integer idRecipe){
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
 
-        List<IngredientToRecipe> response = List.of(Objects.requireNonNull(webClient.get()
-                .uri("http://localhost:8081/api/v1/ingredient/from-recipe/" + idRecipe)
+        List<IngredientToRecipe> response = List.of(Objects.requireNonNull(webClientBuilder.build().get()
+                .uri("http://ingredient-service/api/ingredient/from-recipe/" + idRecipe)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(IngredientToRecipe[].class)

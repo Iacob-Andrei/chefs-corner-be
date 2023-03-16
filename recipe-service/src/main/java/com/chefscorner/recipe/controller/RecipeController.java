@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@RequestMapping("api/v1/recipe")
+@RequestMapping("api/recipe")
 public class RecipeController {
 
     private final RecipeService recipeService;
