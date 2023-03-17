@@ -12,9 +12,9 @@
   <name>chefs-corner</name>
   <modules>
     <module>recipe-service</module>
-      <module>ingredient-service</module>
-      <module>discovery-server</module>
-
+    <module>ingredient-service</module>
+    <module>discovery-server</module>
+    <module>api-gateway</module>
   </modules>
 
   <properties>
