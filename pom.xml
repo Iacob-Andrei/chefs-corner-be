@@ -68,7 +68,7 @@
           <version>3.3.1</version>
           <configuration>
             <from>
-              <image>openjdk:19-jdk-alpine</image>
+              <image>openjdk:19</image>
             </from>
             <to>
               <image>registry.hub.docker.com/aiacob09/${project.artifactId}</image>

@@ -1,0 +1,50 @@
+services:
+  discovery-server:
+    image: aiacob09/discovery-server:latest
+    container_name: discovery-server
+    pull_policy: always
+    ports:
+      - "8761:8761"
+    expose:
+      - "8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    image: aiacob09/api-gateway:latest
+    container_name: api-gateway
+    pull_policy: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+
+  recipe-service:
+    container_name: recipe-service
+    image: aiacob09/recipe-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://chefs-corner-db-do-user-9451802-0.b.db.ondigitalocean.com:25060/defaultdb
+      - SPRING_DATASOURCE_USERNAME=doadmin
+      - SPRING_DATASOURCE_PASSWORD=AVNS_s7rpH75Yt-GDrSyyZCG
+    depends_on:
+      - discovery-server
+      - api-gateway
+
+  ingredient-service:
+    container_name: ingredient-service
+    image: aiacob09/ingredient-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://chefs-corner-db-do-user-9451802-0.b.db.ondigitalocean.com:25060/defaultdb
+      - SPRING_DATASOURCE_USERNAME=doadmin
+      - SPRING_DATASOURCE_PASSWORD=AVNS_s7rpH75Yt-GDrSyyZCG
+    depends_on:
+      - discovery-server
+      - api-gateway
