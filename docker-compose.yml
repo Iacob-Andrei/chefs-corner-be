@@ -1,0 +1,50 @@
+services:
+  discovery-server:
+    image: aiacob09/discovery-server:latest
+    container_name: discovery-server
+    pull_policy: if_not_present
+    ports:
+      - "8761:8761"
+    expose:
+      - "8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    image: aiacob09/api-gateway:latest
+    container_name: api-gateway
+    pull_policy: if_not_present
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+
+  recipe-service:
+    container_name: recipe-service
+    image: aiacob09/recipe-service:latest
+    pull_policy: if_not_present
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=${url_db}
+      - SPRING_DATASOURCE_USERNAME=${username_db}
+      - SPRING_DATASOURCE_PASSWORD=${password_db}
+    depends_on:
+      - discovery-server
+      - api-gateway
+
+  ingredient-service:
+    container_name: ingredient-service
+    image: aiacob09/ingredient-service:latest
+    pull_policy: if_not_present
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=${url_db}
+      - SPRING_DATASOURCE_USERNAME=${username_db}
+      - SPRING_DATASOURCE_PASSWORD=${password_db}
+    depends_on:
+      - discovery-server
+      - api-gateway
