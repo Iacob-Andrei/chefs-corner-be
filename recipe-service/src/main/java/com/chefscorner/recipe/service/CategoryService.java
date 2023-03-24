@@ -24,10 +24,8 @@ public class CategoryService {
     public PageDto getRecipesFromCategories(String category, Integer page) {
         if(page < 0){ throw new InvalidNumberPage(page, category); }
 
-        if(category.equals("")){
-            category = null;
-        }
-        Page<Recipe> slice = categoryRepository.findByCategory(category, PageRequest.of(page, 20));
+        Page<Recipe> slice = category.equals("") ? categoryRepository.findByPage(PageRequest.of(page, 20)) :
+                                                   categoryRepository.findByCategory(category, PageRequest.of(page, 20));
         List<Recipe> recipesInBatch = slice.getContent();
 
         if(slice.getTotalPages() == 0){ throw new InvalidNumberPage(category); }

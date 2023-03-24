@@ -33,6 +33,8 @@ public class RecipeMapper {
         return RecipeDto.builder()
                 .id(recipe.getId())
                 .name(recipe.getName())
+                .prep_time(recipe.getPrep_time())
+                .cook_time(recipe.getCook_time())
                 .image(recipe.getImage())
                 .build();
     }
