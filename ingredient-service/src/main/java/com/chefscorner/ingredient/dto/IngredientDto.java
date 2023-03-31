@@ -13,6 +13,7 @@ public class IngredientDto {
 
     private Integer id;
     private String name;
+    private Float price_per_unit;
     private String image;
     private String svg;
 }

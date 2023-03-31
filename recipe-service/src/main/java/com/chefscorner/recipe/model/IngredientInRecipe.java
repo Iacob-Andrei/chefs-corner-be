@@ -1,6 +1,5 @@
 package com.chefscorner.recipe.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,24 +9,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name= "ingredient_to_recipe")
-public class IngredientToRecipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class IngredientInRecipe {
     private Integer id;
-
-    private Integer id_recipe;
-
-    @ManyToOne
-    @JoinColumn(name = "id_ingredient")
-    private Ingredient ingredient;
-
+    private String name;
+    private Float price_per_unit;
+    private String image;
+    private String svg;
     private Double amount;
-
     private String description;
-
     private String unit;
-
     private Double grams;
 }

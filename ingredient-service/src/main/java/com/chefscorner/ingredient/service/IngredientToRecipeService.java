@@ -21,7 +21,6 @@ public class IngredientToRecipeService {
 
     public List<IngredientToRecipeDto> getIngredientsByIdRecipe(Integer id) {
         List<IngredientToRecipe> ingredientsList= ingredientToRecipeRepository.findIngredientsByIdRecipe(id);
-
         return ingredientsList.stream().map(IngredientToRecipeMapper::ingredientToRecipeToIngredientToRecipeDto).collect(Collectors.toList());
     }
 }

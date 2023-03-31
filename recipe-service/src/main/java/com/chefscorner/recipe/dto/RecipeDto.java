@@ -23,5 +23,5 @@ public class RecipeDto {
     private String image;
     private List<DirectionDto> directions;
     private List<CategoryDto> categories;
-    private List<IngredientToRecipeDto> ingredients;
+    private List<IngredientInRecipeDto> ingredients;
 }

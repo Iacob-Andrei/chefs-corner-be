@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 public class IngredientToRecipeDto {
 
     private Integer id;
-    private IngredientDto ingredient;
+    private String name;
+    private Float price_per_unit;
+    private String image;
+    private String svg;
     private Double amount;
     private String description;
     private String unit;
