@@ -1,5 +1,7 @@
 package com.chefscorner.user.service;
 
+import com.chefscorner.user.dto.TokenDto;
+import com.chefscorner.user.exception.EmailNotUniqueException;
 import com.chefscorner.user.model.User;
 import com.chefscorner.user.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,21 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
-    public String saveUser(User userInfo){
+    public TokenDto saveUser(User userInfo){
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        repository.save(userInfo);
-        return "user added";
+        try {
+            repository.save(userInfo);
+        } catch (Exception e){
+            throw new EmailNotUniqueException(userInfo.getEmail());
+        }
+        return generateToken(userInfo.getEmail());
     }
 
-    public String generateToken(String email){
-        return jwtService.generateToken(email);
+    public TokenDto generateToken(String email){
+        String token = jwtService.generateToken(email);
+        return TokenDto.builder()
+                .token(token)
+                .build();
     }
 
     public void validateToken(String token){

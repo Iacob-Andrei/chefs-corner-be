@@ -1,6 +1,8 @@
 package com.chefscorner.user.controller;
 
 import com.chefscorner.user.dto.AuthRequest;
+import com.chefscorner.user.dto.TokenDto;
+import com.chefscorner.user.exception.InvalidTokenException;
 import com.chefscorner.user.model.User;
 import com.chefscorner.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +34,23 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public String addNewUser(@RequestBody User user){
+    public TokenDto addNewUser(@RequestBody User user){
         return service.saveUser(user);
     }
 
     @PostMapping("/token")
-    public String getToken(@RequestBody AuthRequest authRequest){
+    public TokenDto getToken(@RequestBody AuthRequest authRequest){
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+
         if(authenticate.isAuthenticated()){
             return service.generateToken(authRequest.getEmail());
         }else{
-            throw new RuntimeException("Invalid access token");
+            throw new InvalidTokenException();
         }
     }
 
     @GetMapping("/validate")
-    public String validateToken(@RequestParam("token")String token){
+    public void validateToken(@RequestParam("token")String token){
         service.validateToken(token);
-        return "Token is valid";
     }
 }

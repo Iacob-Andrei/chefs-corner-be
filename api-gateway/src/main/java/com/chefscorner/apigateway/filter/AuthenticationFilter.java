@@ -1,5 +1,7 @@
 package com.chefscorner.apigateway.filter;
 
+import com.chefscorner.apigateway.exception.InvalidTokenException;
+import com.chefscorner.apigateway.exception.MissingAuthorizationHeaderException;
 import com.chefscorner.apigateway.util.JwtUtil;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             if(validator.isSecured.test(exchange.getRequest())){
                 //header contains token or not
                 if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
-                    throw new RuntimeException("missing authorization header");
+                    throw new MissingAuthorizationHeaderException();
                 }
 
                 String authHeader = Objects.requireNonNull(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
@@ -39,7 +41,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 try{
                     jwtUtil.validateToken(authHeader);
                 }catch (Exception e){
-                    throw new RuntimeException("unauthorized access to application");
+                    throw new InvalidTokenException();
                 }
             }
             return chain.filter(exchange);
