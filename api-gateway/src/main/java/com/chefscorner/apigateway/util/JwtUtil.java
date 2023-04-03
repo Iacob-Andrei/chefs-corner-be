@@ -3,27 +3,18 @@ package com.chefscorner.apigateway.util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.security.Key;
 
 @Component
 public class JwtUtil {
 
-    static PropertiesConfiguration config;
-    static {
-        try {
-            config = new PropertiesConfiguration(new File("D:\\Facultate\\Licenta\\chefs-corner-be\\.env"));
-        } catch (ConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public static final String SECRET = config.getString("secret.key");
+    @Value("${secret.key}")
+    public String SECRET;
 
-    public void validateToken(final String token) {
+    public void validateToken(String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
     }
 
