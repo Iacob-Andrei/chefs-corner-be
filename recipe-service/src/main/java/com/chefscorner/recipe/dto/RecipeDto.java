@@ -1,5 +1,6 @@
 package com.chefscorner.recipe.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,5 +23,5 @@ public class RecipeDto {
     private String image;
     private List<DirectionDto> directions;
     private List<CategoryDto> categories;
-    private List<IngredientToRecipeDto> ingredients;
+    private List<IngredientInRecipeDto> ingredients;
 }

@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class IngredientDto {
-
-    private Integer id;
-    private String name;
-    private String image;
-    private String svg;
+public class PageDto {
+    private Integer currentPage;
+    private Integer totalPages;
+    private List<RecipeDto> recipes;
 }

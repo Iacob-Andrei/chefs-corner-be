@@ -9,6 +9,7 @@ public class IngredientMapper {
         return IngredientDto.builder()
                 .id(ingredient.getId())
                 .name(ingredient.getName())
+                .price_per_unit(ingredient.getPrice_per_unit())
                 .image(ingredient.getImage())
                 .svg(ingredient.getSvg())
                 .build();

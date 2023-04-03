@@ -1,7 +1,8 @@
 package com.chefscorner.recipe.mapper;
 
+import com.chefscorner.recipe.dto.IngredientInRecipeDto;
 import com.chefscorner.recipe.dto.RecipeDto;
-import com.chefscorner.recipe.model.IngredientToRecipe;
+import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Recipe;
 
 import java.util.List;
@@ -9,8 +10,7 @@ import java.util.stream.Collectors;
 
 public class RecipeMapper {
 
-
-    public static RecipeDto recipeToRecipeDto(Recipe recipe, List<IngredientToRecipe> ingredients) {
+    public static RecipeDto recipeToRecipeDto(Recipe recipe, List<IngredientInRecipe> ingredients) {
         return RecipeDto.builder()
                 .id(recipe.getId())
                 .name(recipe.getName())
@@ -22,11 +22,21 @@ public class RecipeMapper {
                             .map(DirectionMapper::directionToDirectionDto)
                             .collect(Collectors.toList()))
                 .ingredients(ingredients.stream()
-                            .map(IngredientToRecipeMapper::ingredientToRecipeToIngredientToRecipeDto)
+                            .map(IngredientInRecipeDto::from)
                             .collect(Collectors.toList()))
                 .categories(recipe.getCategories().stream()
                             .map(CategoryMapper::categoryToCategoryDto)
                             .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static RecipeDto recipeToRecipeDtoOnlyInfo(Recipe recipe){
+        return RecipeDto.builder()
+                .id(recipe.getId())
+                .name(recipe.getName())
+                .prep_time(recipe.getPrep_time())
+                .cook_time(recipe.getCook_time())
+                .image(recipe.getImage())
                 .build();
     }
 }

@@ -1,19 +1,24 @@
+version: '3.8'
 services:
   discovery-server:
-    image: aiacob09/discovery-server:latest
     container_name: discovery-server
-    pull_policy: if_not_present
+    image: aiacob09/discovery-server:latest
+    pull_policy: always
     ports:
       - "8761:8761"
     expose:
       - "8761"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    command: >
+      sh -c "docker image rm aiacob09/discovery-server:latest
+             && docker image pull aiacob09/discovery-server:latest
+             && command-to-start-container"
 
   api-gateway:
-    image: aiacob09/api-gateway:latest
     container_name: api-gateway
-    pull_policy: if_not_present
+    image: aiacob09/api-gateway:latest
+    pull_policy: always
     ports:
       - "8080:8080"
     expose:
@@ -22,11 +27,15 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - discovery-server
+    command: >
+      sh -c "docker image rm aiacob09/api-gateway:latest
+             && docker image pull aiacob09/api-gateway:latest
+             && command-to-start-container"
 
   recipe-service:
     container_name: recipe-service
     image: aiacob09/recipe-service:latest
-    pull_policy: if_not_present
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=${url_db}
@@ -35,11 +44,15 @@ services:
     depends_on:
       - discovery-server
       - api-gateway
+    command: >
+      sh -c "docker image rm aiacob09/recipe-service:latest
+             && docker image pull aiacob09/recipe-service:latest
+             && command-to-start-container"
 
   ingredient-service:
     container_name: ingredient-service
     image: aiacob09/ingredient-service:latest
-    pull_policy: if_not_present
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=${url_db}
@@ -48,3 +61,7 @@ services:
     depends_on:
       - discovery-server
       - api-gateway
+    command: >
+      sh -c "docker image rm aiacob09/ingredient-service:latest
+             && docker image pull aiacob09/ingredient-service:latest
+             && command-to-start-container"
