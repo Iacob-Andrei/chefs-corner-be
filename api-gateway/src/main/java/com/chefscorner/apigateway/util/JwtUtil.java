@@ -3,14 +3,25 @@ package com.chefscorner.apigateway.util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.security.Key;
 
 @Component
 public class JwtUtil {
 
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    static PropertiesConfiguration config;
+    static {
+        try {
+            config = new PropertiesConfiguration(new File("D:\\Facultate\\Licenta\\chefs-corner-be\\.env"));
+        } catch (ConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static final String SECRET = config.getString("secret.key");
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
