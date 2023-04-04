@@ -2,8 +2,8 @@ package com.chefscorner.user.controller;
 
 import com.chefscorner.user.dto.AuthRequest;
 import com.chefscorner.user.dto.TokenDto;
+import com.chefscorner.user.dto.UserDto;
 import com.chefscorner.user.exception.InvalidTokenException;
-import com.chefscorner.user.model.User;
 import com.chefscorner.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @Slf4j
@@ -34,8 +37,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public TokenDto addNewUser(@RequestBody User user){
-        return service.saveUser(user);
+    public TokenDto addNewUser(UserDto user, @RequestParam MultipartFile image) throws IOException {
+        return service.saveUser(user, image);
     }
 
     @PostMapping("/token")
