@@ -8,6 +8,7 @@ import com.chefscorner.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,23 +38,23 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public TokenDto addNewUser(UserDto user, @RequestParam MultipartFile image) throws IOException {
-        return service.saveUser(user, image);
+    public ResponseEntity<TokenDto> addNewUser(UserDto user, @RequestParam MultipartFile image) throws IOException {
+        return ResponseEntity.ok().body(service.saveUser(user, image));
     }
 
     @PostMapping("/token")
-    public TokenDto getToken(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<TokenDto> getToken(@RequestBody AuthRequest authRequest){
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
         if(authenticate.isAuthenticated()){
-            return service.generateToken(authRequest.getEmail());
+            return ResponseEntity.ok().body(service.generateToken(authRequest.getEmail()));
         }else{
             throw new InvalidTokenException();
         }
     }
 
     @GetMapping("/validate")
-    public void validateToken(@RequestParam("token")String token){
-        service.validateToken(token);
+    public ResponseEntity<String> validateToken(@RequestParam("token")String token){
+        return ResponseEntity.ok().body(service.validateToken(token));
     }
 }

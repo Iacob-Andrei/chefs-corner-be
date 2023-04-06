@@ -4,6 +4,7 @@ import com.chefscorner.recipe.dto.PageDto;
 import com.chefscorner.recipe.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,8 +18,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{category},{offset}")
-    public PageDto recipesByCategory(@PathVariable("category") String category,
-                                     @PathVariable("offset") Integer offset){
-        return categoryService.getRecipesFromCategories(category, offset);
+    public ResponseEntity<PageDto> recipesByCategory(@PathVariable("category") String category,
+                                                     @PathVariable("offset") Integer offset){
+        return ResponseEntity.ok().body(categoryService.getRecipesFromCategories(category, offset));
     }
 }

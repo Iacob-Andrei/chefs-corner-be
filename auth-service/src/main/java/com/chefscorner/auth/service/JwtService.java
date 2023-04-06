@@ -19,9 +19,10 @@ public class JwtService {
     @Value("${secret.key}")
     public String SECRET;
 
-    public void validateToken(String token) {
+    public String validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+            return "Ok";
         }catch (Exception e){
             throw new InvalidTokenException();
         }

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -47,12 +46,7 @@ public class AuthService {
                 .build();
     }
 
-    public void validateToken(String token){
-        jwtService.validateToken(token);
-    }
-
-    public byte[] downloadImage(String email){
-        Optional<User> imageData = repository.findByEmail(email);
-        return ImageUtil.decompressImage(imageData.get().getData());
+    public String validateToken(String token){
+        return jwtService.validateToken(token);
     }
 }
