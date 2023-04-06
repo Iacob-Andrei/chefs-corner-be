@@ -5,13 +5,9 @@ import com.chefscorner.auth.dto.UserDto;
 import com.chefscorner.auth.exception.EmailNotUniqueException;
 import com.chefscorner.auth.model.User;
 import com.chefscorner.auth.repository.UserInfoRepository;
-import com.chefscorner.auth.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Service
 public class AuthService {
@@ -25,18 +21,19 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
-    public TokenDto saveUser(UserDto user, MultipartFile image) throws IOException {
+    public TokenDto saveUser(UserDto user) {
         User userInfo = new User(user.getName(),
                                  user.getEmail(),
                                  passwordEncoder.encode(user.getPassword()),
-                                 user.isBusiness(),
-                                 ImageUtil.compressImage(image.getBytes()));
+                                 user.isBusiness());
         try {
             repository.save(userInfo);
         } catch (Exception e){
             throw new EmailNotUniqueException(userInfo.getEmail());
         }
-        return generateToken(userInfo.getEmail());
+        TokenDto token = generateToken(userInfo.getEmail());
+        token.setId(userInfo.getId());
+        return token;
     }
 
     public TokenDto generateToken(String email){

@@ -26,11 +26,10 @@ public class User {
     @Column(name = "data", columnDefinition = "BLOB")
     private byte[] data;
 
-    public User(String name, String email, String password, boolean business, byte[] data) {
+    public User(String name, String email, String password, boolean business) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.business = business;
-        this.data = data;
     }
 }

@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 
 @Slf4j
@@ -38,8 +35,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<TokenDto> addNewUser(UserDto user, @RequestParam MultipartFile image) throws IOException {
-        return ResponseEntity.ok().body(service.saveUser(user, image));
+    public ResponseEntity<TokenDto> addNewUser(@RequestBody UserDto user) {
+        return ResponseEntity.ok().body(service.saveUser(user));
     }
 
     @PostMapping("/token")

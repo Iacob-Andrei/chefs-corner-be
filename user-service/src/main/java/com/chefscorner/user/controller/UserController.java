@@ -8,9 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -25,5 +30,16 @@ public class UserController {
     @GetMapping("{email}")
     public ResponseEntity<UserDto> getUserDataByEmail(@PathVariable("email")String email){
         return ResponseEntity.ok().body(service.getUserByEmail(email));
+    }
+
+    @PatchMapping("{email}/image")
+    public ResponseEntity<String> updateUserImage(@PathVariable("email")String email, @RequestParam MultipartFile image) throws IOException {
+        service.updateUserImage(email, image);
+        return ResponseEntity.ok().body("ok");
+    }
+
+    @GetMapping("{email}/image")
+    public ResponseEntity<byte[]> getUserImage(@PathVariable("email")String email){
+        return ResponseEntity.ok().body(service.getUserImageByEmail(email));
     }
 }
