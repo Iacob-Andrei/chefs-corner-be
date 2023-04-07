@@ -31,5 +31,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.business = business;
+        this.data = new byte[0];
     }
 }
