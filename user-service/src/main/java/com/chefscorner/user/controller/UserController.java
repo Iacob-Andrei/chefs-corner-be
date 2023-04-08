@@ -33,9 +33,8 @@ public class UserController {
     }
 
     @PatchMapping("{email}/image")
-    public ResponseEntity<String> updateUserImage(@PathVariable("email")String email, @RequestParam MultipartFile image) throws IOException {
+    public void updateUserImage(@PathVariable("email")String email, @RequestParam MultipartFile image) throws IOException {
         service.updateUserImage(email, image);
-        return ResponseEntity.ok().body("ok");
     }
 
     @GetMapping("{email}/image")

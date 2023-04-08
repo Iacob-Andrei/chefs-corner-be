@@ -43,7 +43,7 @@ public class AuthService {
                 .build();
     }
 
-    public String validateToken(String token){
-        return jwtService.validateToken(token);
+    public void validateToken(String token){
+        jwtService.validateToken(token);
     }
 }
