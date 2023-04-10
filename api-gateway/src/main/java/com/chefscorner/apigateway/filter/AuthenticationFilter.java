@@ -4,25 +4,25 @@ import com.chefscorner.apigateway.exception.InvalidTokenException;
 import com.chefscorner.apigateway.exception.MissingAuthorizationHeaderException;
 import com.chefscorner.apigateway.util.JwtUtil;
 import org.apache.http.HttpHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
-    @Autowired
-    private RouteValidator validator;
+    private final RouteValidator validator;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    public AuthenticationFilter() {
+    public AuthenticationFilter(RouteValidator validator, JwtUtil jwtUtil) {
         super(Config.class);
+        this.validator = validator;
+        this.jwtUtil = jwtUtil;
     }
+
 
     @Override
     public GatewayFilter apply(Config config) {

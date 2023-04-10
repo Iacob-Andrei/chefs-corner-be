@@ -3,14 +3,12 @@ package com.chefscorner.recipe.controller;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")

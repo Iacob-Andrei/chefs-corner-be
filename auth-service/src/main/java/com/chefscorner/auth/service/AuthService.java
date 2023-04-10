@@ -5,21 +5,17 @@ import com.chefscorner.auth.dto.UserDto;
 import com.chefscorner.auth.exception.EmailNotUniqueException;
 import com.chefscorner.auth.model.User;
 import com.chefscorner.auth.repository.UserInfoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UserInfoRepository repository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
+    private final UserInfoRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public TokenDto saveUser(UserDto user) {
         User userInfo = new User(user.getName(),

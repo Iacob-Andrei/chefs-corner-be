@@ -5,7 +5,7 @@ import com.chefscorner.user.exception.EmailNotFoundException;
 import com.chefscorner.user.model.User;
 import com.chefscorner.user.repository.UserRepository;
 import com.chefscorner.user.util.ImageUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserDto getUserByEmail(String email){
         Optional<User> user = repository.findByEmail(email);

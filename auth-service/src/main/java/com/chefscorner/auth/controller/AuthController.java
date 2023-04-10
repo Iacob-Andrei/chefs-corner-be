@@ -6,8 +6,6 @@ import com.chefscorner.auth.dto.UserDto;
 import com.chefscorner.auth.exception.InvalidTokenException;
 import com.chefscorner.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,18 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.AuthenticationManager;
 
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 @RequestMapping("api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService service;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthService service;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
     public ResponseEntity<TokenDto> addNewUser(@RequestBody UserDto user) {
