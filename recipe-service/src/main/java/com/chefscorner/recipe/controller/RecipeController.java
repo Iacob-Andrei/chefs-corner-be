@@ -5,7 +5,9 @@ import com.chefscorner.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,12 +20,22 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeDto> recipeByidWithImage(@PathVariable("id") Integer id){
+    public ResponseEntity<RecipeDto> recipeByIdWithImage(@PathVariable("id") Integer id){
         return ResponseEntity.ok().body(recipeService.getRecipeById(id));
     }
 
     @GetMapping("/name/{pattern}")
     public ResponseEntity<List<RecipeDto>> findRecipesByNamePattern(@PathVariable("pattern") String pattern){
         return ResponseEntity.ok().body(recipeService.findRecipesByNamePattern(pattern));
+    }
+
+    @PostMapping("")
+    public ResponseEntity<RecipeDto> postNewRecipe(@RequestBody RecipeDto recipe){
+        return ResponseEntity.ok().body(recipeService.saveRecipe(recipe));
+    }
+
+    @PatchMapping("/image/{id}")
+    public void updateRecipeImage(@PathVariable("id")Integer id, @RequestParam MultipartFile image) throws IOException {
+        recipeService.updateRecipeImage(id, image);
     }
 }

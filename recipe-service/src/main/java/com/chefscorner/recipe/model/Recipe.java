@@ -25,6 +25,10 @@ public class Recipe {
     private Integer cook_time;
     private Integer number_servings;
     private String image;
+    private String owner;
+    @Column(columnDefinition = "BLOB")
+    private byte[] image_data;
+
     @OneToMany(
             mappedBy = "recipe",
             cascade = CascadeType.ALL,
@@ -39,12 +43,13 @@ public class Recipe {
     )
     private List<Category> categories = new ArrayList<>();
 
-    public Recipe(Integer id, String name, Integer prep_time, Integer cook_time, Integer number_servings, String image) {
-        this.id = id;
+    public Recipe(String name, Integer prep_time, Integer cook_time, Integer number_servings, String owner) {
         this.name = name;
         this.prep_time = prep_time;
         this.cook_time = cook_time;
         this.number_servings = number_servings;
-        this.image = image;
+        this.image = "";
+        this.owner = owner;
+        this.image_data = new byte[0];
     }
 }

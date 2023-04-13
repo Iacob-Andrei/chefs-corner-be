@@ -20,6 +20,8 @@ public class RecipeDto {
     private Integer prep_time;
     private Integer cook_time;
     private Integer number_servings;
+    private String owner;
+    private byte[] file;
     private String image;
     private List<DirectionDto> directions;
     private List<CategoryDto> categories;

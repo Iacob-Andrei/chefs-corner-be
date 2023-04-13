@@ -3,7 +3,7 @@ package com.chefscorner.auth.service;
 import com.chefscorner.auth.model.CustomUserDetails;
 import com.chefscorner.auth.model.User;
 import com.chefscorner.auth.repository.UserInfoRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
+    @Autowired
     private UserInfoRepository repository;
 
     @Override

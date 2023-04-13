@@ -11,3 +11,4 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     List<Recipe> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
+// findByNameContainingIgnoreCaseAndOwner
