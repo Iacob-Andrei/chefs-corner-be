@@ -31,6 +31,7 @@ public class RecipeController {
 
     @PostMapping("")
     public ResponseEntity<RecipeDto> postNewRecipe(@RequestBody RecipeDto recipe){
+        System.out.println(recipe);
         return ResponseEntity.ok().body(recipeService.saveRecipe(recipe));
     }
 

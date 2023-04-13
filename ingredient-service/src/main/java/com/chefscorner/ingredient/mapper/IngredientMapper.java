@@ -14,4 +14,11 @@ public class IngredientMapper {
                 .svg(ingredient.getSvg())
                 .build();
     }
+
+    public static IngredientDto ingredientWithInfoOnly(Ingredient ingredient){
+        return  IngredientDto.builder()
+                .id(ingredient.getId())
+                .name(ingredient.getName())
+                .build();
+    }
 }
