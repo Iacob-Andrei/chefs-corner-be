@@ -23,4 +23,6 @@ public class Direction {
     private Recipe recipe;
     private Integer order;
     private String instruction;
+    @Column(name = "video_data", columnDefinition = "BLOB")
+    private byte[] video_data;
 }

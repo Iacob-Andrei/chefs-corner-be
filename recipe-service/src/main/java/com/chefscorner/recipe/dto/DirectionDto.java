@@ -14,4 +14,5 @@ public class DirectionDto {
     private Integer id;
     private Integer order;
     private String instruction;
+    private byte[] video_data;
 }
