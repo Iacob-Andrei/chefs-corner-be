@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Repository
-public interface DirectionRepository extends JpaRepository<Direction, Long> {
+public interface DirectionRepository extends JpaRepository<Direction, Integer> {
 
     @Query(value = "select d from Direction d join Recipe r on d.recipe = r and r.id = ?1")
     List<Direction> findByRecipeId(Integer id);
