@@ -7,7 +7,6 @@ import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecipeService {

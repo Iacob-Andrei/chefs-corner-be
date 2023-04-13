@@ -25,11 +25,30 @@ services:
       - "8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SECRET_KEY=${secret_key}
     depends_on:
       - discovery-server
     command: >
       sh -c "docker image rm aiacob09/api-gateway:latest
              && docker image pull aiacob09/api-gateway:latest
+             && command-to-start-container"
+
+  auth-service:
+    container_name: auth-service
+    image: aiacob09/auth-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=${url_db}
+      - SPRING_DATASOURCE_USERNAME=${username_db}
+      - SPRING_DATASOURCE_PASSWORD=${password_db}
+      - SECRET_KEY=${secret_key}
+    depends_on:
+      - discovery-server
+      - api-gateway
+    command: >
+      sh -c "docker image rm aiacob09/auth-service:latest
+             && docker image pull aiacob09/auth-service:latest
              && command-to-start-container"
 
   recipe-service:
@@ -44,6 +63,7 @@ services:
     depends_on:
       - discovery-server
       - api-gateway
+      - auth-service
     command: >
       sh -c "docker image rm aiacob09/recipe-service:latest
              && docker image pull aiacob09/recipe-service:latest
@@ -61,7 +81,26 @@ services:
     depends_on:
       - discovery-server
       - api-gateway
+      - auth-service
     command: >
       sh -c "docker image rm aiacob09/ingredient-service:latest
              && docker image pull aiacob09/ingredient-service:latest
+             && command-to-start-container"
+
+  user-service:
+    container_name: user-service
+    image: aiacob09/user-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=${url_db}
+      - SPRING_DATASOURCE_USERNAME=${username_db}
+      - SPRING_DATASOURCE_PASSWORD=${password_db}
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - auth-service
+    command: >
+      sh -c "docker image rm aiacob09/user-service:latest
+             && docker image pull aiacob09/user-service:latest
              && command-to-start-container"
