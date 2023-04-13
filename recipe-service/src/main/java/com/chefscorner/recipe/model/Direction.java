@@ -33,10 +33,4 @@ public class Direction {
         this.instruction = instruction;
         this.video_data = new byte[0];
     }
-
-    public Direction(DirectionDto directionDto) {
-        this.step = directionDto.getOrder();
-        this.instruction = directionDto.getInstruction();
-        this.video_data = new byte[0];
-    }
 }

@@ -1,10 +1,8 @@
 package com.chefscorner.recipe.service;
 
-import com.chefscorner.recipe.dto.DirectionDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.RecipeMapper;
-import com.chefscorner.recipe.model.Direction;
 import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.RecipeRepository;
@@ -17,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
