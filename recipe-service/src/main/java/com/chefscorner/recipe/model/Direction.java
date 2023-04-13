@@ -1,7 +1,6 @@
 package com.chefscorner.recipe.model;
 
 
-import com.chefscorner.recipe.dto.DirectionDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
