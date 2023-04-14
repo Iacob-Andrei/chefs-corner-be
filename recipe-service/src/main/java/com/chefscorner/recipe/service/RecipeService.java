@@ -9,14 +9,11 @@ import com.chefscorner.recipe.repository.RecipeRepository;
 import com.chefscorner.recipe.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,17 +24,11 @@ public class RecipeService {
 
     private final DirectionService directionService;
     private final RecipeRepository recipeRepository;
-    private final WebClient.Builder webClientBuilder;
+    private final WebService webService;
 
     public RecipeDto getRecipeById(Integer idRecipe){
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
-
-        List<IngredientInRecipe> response = List.of(Objects.requireNonNull(webClientBuilder.build().get()
-                .uri("http://ingredient-service/api/ingredient/from-recipe/" + idRecipe)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(IngredientInRecipe[].class)
-                .block()));
+        List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
 
         return RecipeMapper.recipeToRecipeDto(recipe, response);
     }
@@ -58,6 +49,7 @@ public class RecipeService {
 
         recipeRepository.save(recipe);
         directionService.saveDirections(requestData.getDirections(), recipe);
+        webService.postIngredientsForRecipe(recipe.getId());
 
         return RecipeDto.builder().id(recipe.getId()).build();
     }
