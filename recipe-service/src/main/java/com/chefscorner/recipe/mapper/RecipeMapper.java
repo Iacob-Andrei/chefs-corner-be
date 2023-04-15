@@ -40,6 +40,7 @@ public class RecipeMapper {
                 .prep_time(recipe.getPrep_time())
                 .cook_time(recipe.getCook_time())
                 .image(recipe.getImage())
+                .file(ImageUtil.decompressImage(recipe.getImage_data()))
                 .build();
     }
 }

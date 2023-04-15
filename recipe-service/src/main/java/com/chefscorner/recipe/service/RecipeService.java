@@ -8,11 +8,14 @@ import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.RecipeRepository;
 import com.chefscorner.recipe.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,5 +64,14 @@ public class RecipeService {
         Recipe recipe = recipeOptional.get();
         recipe.setImage_data(ImageUtil.compressImage(image.getBytes()));
         recipeRepository.save(recipe);
+    }
+
+    public List<RecipeDto> getUsersRecipes(String bearerToken) throws JSONException {
+        String payloadChunk = bearerToken.split(" ")[1].split("\\.")[1];
+        String payload = new String(Base64.getUrlDecoder().decode(payloadChunk));
+
+        String owner = (String) new JSONObject(payload).get("sub");
+        List<Recipe> result = recipeRepository.findRecipeByOwner(owner);
+        return result.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList());
     }
 }

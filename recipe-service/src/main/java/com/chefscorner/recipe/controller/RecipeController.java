@@ -3,6 +3,7 @@ package com.chefscorner.recipe.controller;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,11 @@ public class RecipeController {
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDto> recipeByIdWithImage(@PathVariable("id") Integer id){
         return ResponseEntity.ok().body(recipeService.getRecipeById(id));
+    }
+
+    @GetMapping("/for-user")
+    public ResponseEntity<?> getUsersRecipes(@RequestHeader("Authorization") String bearerToken) throws JSONException {
+        return ResponseEntity.ok().body(recipeService.getUsersRecipes(bearerToken));
     }
 
     @GetMapping("/name/{pattern}")
