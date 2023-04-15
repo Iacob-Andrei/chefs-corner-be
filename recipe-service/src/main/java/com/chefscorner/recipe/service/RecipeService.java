@@ -49,7 +49,7 @@ public class RecipeService {
 
         recipeRepository.save(recipe);
         directionService.saveDirections(requestData.getDirections(), recipe);
-        webService.postIngredientsForRecipe(recipe.getId());
+        webService.postIngredientsForRecipe(recipe.getId(), requestData.getIngredients());  //TODO: check for error
 
         return RecipeDto.builder().id(recipe.getId()).build();
     }
