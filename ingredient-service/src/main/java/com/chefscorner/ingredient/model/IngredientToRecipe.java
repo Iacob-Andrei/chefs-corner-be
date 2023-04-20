@@ -31,4 +31,13 @@ public class IngredientToRecipe {
     private String unit;
 
     private Double grams;
+
+    public IngredientToRecipe(Integer id_recipe, Ingredient ingredient, Double amount, String description, String unit, Double grams) {
+        this.id_recipe = id_recipe;
+        this.ingredient = ingredient;
+        this.amount = amount;
+        this.description = description;
+        this.unit = unit;
+        this.grams = grams;
+    }
 }

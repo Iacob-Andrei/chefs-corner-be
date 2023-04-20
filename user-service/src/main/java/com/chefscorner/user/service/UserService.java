@@ -33,11 +33,9 @@ public class UserService {
 
     public void updateUserImage(String email, MultipartFile image) throws IOException {
         Optional<User> userOptional = repository.findByEmail(email);
-        System.out.println(userOptional);
-        if(userOptional.isEmpty()) return;
+        if(userOptional.isEmpty()) return; //TODO: return exception
 
         User user = userOptional.get();
-        System.out.println(user);
         user.setData(ImageUtil.compressImage(image.getBytes()));
         repository.save(user);
     }
