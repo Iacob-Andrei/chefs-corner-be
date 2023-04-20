@@ -44,4 +44,9 @@ public class RecipeController {
     public void updateRecipeImage(@PathVariable("id")Integer id, @RequestParam MultipartFile image) throws IOException {
         recipeService.updateRecipeImage(id, image);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteRecipe(@RequestHeader("Authorization") String bearerToken,@PathVariable("id")Integer id) throws JSONException {
+        recipeService.deleteRecipe(bearerToken, id);
+    }
 }
