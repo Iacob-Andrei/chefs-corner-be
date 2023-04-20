@@ -30,7 +30,7 @@ public class IngredientController {
     }
 
     @PostMapping("/add/{idRecipe}")
-    public ResponseEntity<?> postIngredientsForRecipe(@PathVariable("idRecipe")Integer idRecipe, @RequestBody List<IngredientToRecipeDto> ingredients){
+    public ResponseEntity<String> postIngredientsForRecipe(@PathVariable("idRecipe")Integer idRecipe, @RequestBody List<IngredientToRecipeDto> ingredients){
         ingredientToRecipeService.addIngredientsNeeded(idRecipe, ingredients);
 
         return ResponseEntity.ok().body("ok");

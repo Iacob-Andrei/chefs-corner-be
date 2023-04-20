@@ -1,6 +1,7 @@
 package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.DirectionDto;
+import com.chefscorner.recipe.exception.DirectionNotFoundException;
 import com.chefscorner.recipe.mapper.DirectionMapper;
 import com.chefscorner.recipe.model.Direction;
 import com.chefscorner.recipe.model.Recipe;
@@ -41,7 +42,7 @@ public class DirectionService {
 
     public void uploadDirectionVideo(Integer idRecipe, Integer order, MultipartFile video) throws IOException {
          Optional<Direction> directionOptional = directionRepository.findByOrderAndRecipe(order, idRecipe);
-         if(directionOptional.isEmpty()) return; //TODO: return exception
+         if(directionOptional.isEmpty()) throw new DirectionNotFoundException(idRecipe, order);
 
         Direction direction = directionOptional.get();
         direction.setVideo_data(ImageUtil.compressImage(video.getBytes()));

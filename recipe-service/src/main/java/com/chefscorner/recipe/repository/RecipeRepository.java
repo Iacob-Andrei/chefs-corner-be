@@ -13,4 +13,3 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     List<Recipe> findRecipeByOwner(String owner);
 }
-// findByNameContainingIgnoreCaseAndOwner

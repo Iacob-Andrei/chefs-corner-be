@@ -21,12 +21,12 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeDto> recipeByIdWithImage(@PathVariable("id") Integer id){
-        return ResponseEntity.ok().body(recipeService.getRecipeById(id));
+    public ResponseEntity<RecipeDto> recipeByIdWithImage(@RequestHeader("Authorization") String bearerToken, @PathVariable("id") Integer id) throws JSONException {
+        return ResponseEntity.ok().body(recipeService.getRecipeById(bearerToken, id));
     }
 
     @GetMapping("/for-user")
-    public ResponseEntity<?> getUsersRecipes(@RequestHeader("Authorization") String bearerToken) throws JSONException {
+    public ResponseEntity<List<RecipeDto>> getUsersRecipes(@RequestHeader("Authorization") String bearerToken) throws JSONException {
         return ResponseEntity.ok().body(recipeService.getUsersRecipes(bearerToken));
     }
 
@@ -37,7 +37,6 @@ public class RecipeController {
 
     @PostMapping("")
     public ResponseEntity<RecipeDto> postNewRecipe(@RequestBody RecipeDto recipe){
-        System.out.println(recipe);
         return ResponseEntity.ok().body(recipeService.saveRecipe(recipe));
     }
 

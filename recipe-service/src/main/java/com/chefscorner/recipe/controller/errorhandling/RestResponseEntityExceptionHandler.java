@@ -1,5 +1,6 @@
 package com.chefscorner.recipe.controller.errorhandling;
 
+import com.chefscorner.recipe.exception.IngredientNotFoundException;
 import com.chefscorner.recipe.exception.InvalidNumberPage;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -12,12 +13,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
-            RecipeNotFoundException.class,
-            InvalidNumberPage.class
+            InvalidNumberPage.class,
     })
+    public ResponseEntity<String> invalidRequestParameterExceptionHandler(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(ex.getMessage());
+    }
 
-    public ResponseEntity<ErrorMessage> invalidRequestParameterExceptionMapper(RuntimeException ex) {
-        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorMessage);
+    @ExceptionHandler({
+            RecipeNotFoundException.class,
+            IngredientNotFoundException.class
+    })
+    public ResponseEntity<String> notFoundExceptionHandler(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(ex.getMessage());
     }
 }
