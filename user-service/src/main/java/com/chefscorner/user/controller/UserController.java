@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -22,20 +23,25 @@ import java.io.IOException;
 @RequestMapping("api/user")
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
     @GetMapping("{email}")
     public ResponseEntity<UserDto> getUserDataByEmail(@PathVariable("email")String email){
-        return ResponseEntity.ok().body(service.getUserByEmail(email));
+        return ResponseEntity.ok().body(userService.getUserByEmail(email));
     }
 
     @PatchMapping("{email}/image")
     public void updateUserImage(@PathVariable("email")String email, @RequestParam MultipartFile image) throws IOException {
-        service.updateUserImage(email, image);
+        userService.updateUserImage(email, image);
     }
 
     @GetMapping("{email}/image")
     public ResponseEntity<byte[]> getUserImage(@PathVariable("email")String email){
-        return ResponseEntity.ok().body(service.getUserImageByEmail(email));
+        return ResponseEntity.ok().body(userService.getUserImageByEmail(email));
+    }
+
+    @GetMapping("/data/{pattern}")
+    public ResponseEntity<List<String>> getUsersByPattern(@PathVariable("pattern")String pattern){
+        return ResponseEntity.ok().body(userService.getUsersByPattern(pattern));
     }
 }

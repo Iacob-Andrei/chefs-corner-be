@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +40,9 @@ public class UserService {
         User user = userOptional.get();
         user.setData(ImageUtil.compressImage(image.getBytes()));
         repository.save(user);
+    }
+
+    public List<String> getUsersByPattern(String pattern) {
+        return repository.findUsersByEmailContainingIgnoreCase(pattern).stream().map(User::getEmail).collect(Collectors.toList());
     }
 }
