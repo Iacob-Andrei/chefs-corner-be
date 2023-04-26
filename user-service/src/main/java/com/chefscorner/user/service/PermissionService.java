@@ -27,4 +27,16 @@ public class PermissionService {
     public List<String> getUsersWithPermission(Integer idRecipe) {
         return repository.findPermissionsByIdRecipe(idRecipe).stream().map(Permission::getEmail).collect(Collectors.toList());
     }
+
+    public void removeUserPermission(PermissionDto permissionDto) {
+        Optional<Permission> optional = repository.findPermissionByEmailAndIdRecipe(permissionDto.getEmail(), permissionDto.getIdRecipe());
+        if(optional.isPresent()) return;
+
+        Permission permission = new Permission(permissionDto.getIdRecipe(), permissionDto.getEmail());
+        repository.delete(permission);
+    }
+
+    public List<Integer> getRecipesWithPermission(String email) {
+        return repository.findPermissionsByEmail(email).stream().map(Permission::getIdRecipe).collect(Collectors.toList());
+    }
 }

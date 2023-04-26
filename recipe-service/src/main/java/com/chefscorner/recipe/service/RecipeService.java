@@ -33,8 +33,11 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
         List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
 
-        if(!recipe.getOwner().equals(JwtUtil.getSubjectFromToken(bearerToken)) && !recipe.getOwner().equals("public") ){
-            throw new RecipeNotFoundException(idRecipe);
+        if(!recipe.getOwner().equals("public")){
+            String email = JwtUtil.getSubjectFromToken(bearerToken);
+            if(!recipe.getOwner().equals(email) && !webService.getUsersPermissions(email).contains(idRecipe)) {
+                throw new RecipeNotFoundException(idRecipe);
+            }
         }
 
         return RecipeMapper.recipeToRecipeDto(recipe, response);
@@ -72,7 +75,14 @@ public class RecipeService {
     }
 
     public List<RecipeDto> getUsersRecipes(String bearerToken) throws JSONException {
-        List<Recipe> result = recipeRepository.findRecipeByOwner(JwtUtil.getSubjectFromToken(bearerToken));
+        String email = JwtUtil.getSubjectFromToken(bearerToken);
+        List<Recipe> result = recipeRepository.findRecipeByOwner(email);
+
+        for(int idRecipe : webService.getUsersPermissions(email)) {
+            Optional<Recipe> optional = recipeRepository.findById(idRecipe);
+            optional.ifPresent(result::add);
+        }
+
         return result.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList());
     }
 

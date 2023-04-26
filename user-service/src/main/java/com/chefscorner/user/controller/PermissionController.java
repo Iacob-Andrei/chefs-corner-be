@@ -5,6 +5,7 @@ import com.chefscorner.user.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,16 @@ public class PermissionController {
     @GetMapping("/{idRecipe}")
     public ResponseEntity<List<String>> getUsersWithPermission(@PathVariable("idRecipe")Integer idRecipe){
         return ResponseEntity.ok().body(permissionService.getUsersWithPermission(idRecipe));
+    }
+
+    @GetMapping("/for-user/{email}")
+    public ResponseEntity<List<Integer>> getRecipesWithPermission(@PathVariable("email")String email){
+        return ResponseEntity.ok().body(permissionService.getRecipesWithPermission(email));
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<?> removeUserPermission(@RequestBody PermissionDto permissionDto) {
+        permissionService.removeUserPermission(permissionDto);
+        return ResponseEntity.noContent().build();
     }
 }

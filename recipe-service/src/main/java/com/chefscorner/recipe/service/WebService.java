@@ -41,4 +41,14 @@ public class WebService {
                         }))
                 .block();
     }
+
+    public List<Integer> getUsersPermissions(String email){
+        return List.of(Objects.requireNonNull(webClientBuilder.build()
+                .get()
+                .uri("http://user-service/api/permission/for-user/" + email)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Integer[].class)
+                .block()));
+    }
 }

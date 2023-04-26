@@ -12,4 +12,5 @@ public interface PermissionRepository extends JpaRepository<Permission, Integer>
 
     Optional<Permission> findPermissionByEmailAndIdRecipe(String email, Integer idRecipe);
     List<Permission> findPermissionsByIdRecipe(Integer idRecipe);
+    List<Permission> findPermissionsByEmail(String email);
 }
