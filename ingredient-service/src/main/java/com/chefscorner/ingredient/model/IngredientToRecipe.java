@@ -18,7 +18,8 @@ public class IngredientToRecipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer id_recipe;
+    @Column(name = "id_recipe")
+    private Integer recipe;
 
     @ManyToOne
     @JoinColumn(name = "id_ingredient")
@@ -33,7 +34,7 @@ public class IngredientToRecipe {
     private Double grams;
 
     public IngredientToRecipe(Integer id_recipe, Ingredient ingredient, Double amount, String description, String unit, Double grams) {
-        this.id_recipe = id_recipe;
+        this.recipe = id_recipe;
         this.ingredient = ingredient;
         this.amount = amount;
         this.description = description;

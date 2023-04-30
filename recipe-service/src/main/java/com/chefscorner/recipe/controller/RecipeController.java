@@ -25,6 +25,11 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.getRecipeById(bearerToken, id));
     }
 
+    @PostMapping("/list")
+    public ResponseEntity<List<RecipeDto>> recipesByIds(@RequestBody List<Integer> ids){
+        return ResponseEntity.ok().body(recipeService.getRecipesByIds(ids));
+    }
+
     @GetMapping("/for-user")
     public ResponseEntity<List<RecipeDto>> getUsersRecipes(@RequestHeader("Authorization") String bearerToken) throws JSONException {
         return ResponseEntity.ok().body(recipeService.getUsersRecipes(bearerToken));

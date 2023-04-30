@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class IngredientController {
     @GetMapping("from-recipe/{id}")
     public ResponseEntity<List<IngredientToRecipeDto>> getIngredientsByIdRecipe(@PathVariable("id") Integer id){
         return ResponseEntity.ok().body(ingredientToRecipeService.getIngredientsByIdRecipe(id));
+    }
+
+    @PostMapping("from-recipe/list")
+    public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getIngredientsByIdsRecipes(@RequestBody List<Integer> ids){
+        return ResponseEntity.ok().body(ingredientToRecipeService.getIngredientsByIdsRecipes(ids));
     }
 
     @GetMapping("/{pattern}")

@@ -1,5 +1,6 @@
 package com.chefscorner.recipe.service;
 
+import com.chefscorner.recipe.dto.IngredientInRecipeDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.RecipeMapper;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,7 +35,6 @@ public class RecipeService {
 
     public RecipeDto getRecipeById(String bearerToken, Integer idRecipe) throws JSONException {
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
-        List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
 
         if(!recipe.getOwner().equals("public")){
             String email = JwtUtil.getSubjectFromToken(bearerToken);
@@ -40,6 +43,7 @@ public class RecipeService {
             }
         }
 
+        List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
         return RecipeMapper.recipeToRecipeDto(recipe, response);
     }
 
@@ -95,5 +99,18 @@ public class RecipeService {
             throw new RecipeNotFoundException(id);
         }
         recipeRepository.delete(recipe);
+    }
+
+    public List<RecipeDto> getRecipesByIds(List<Integer> recipeIdList) {
+
+        List<Recipe> response = recipeRepository.findRecipesByIdIn(recipeIdList);
+        Map<Integer, List<IngredientInRecipe>> mapIngredients = webService.getIngredientsForRecipes(recipeIdList);
+
+        List<RecipeDto> recipeDtoList = new ArrayList<>();
+        for(Recipe recipe : response){
+            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(recipe, mapIngredients.get(recipe.getId())));
+        }
+
+        return recipeDtoList;
     }
 }

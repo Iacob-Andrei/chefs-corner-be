@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface IngredientToRecipeRepository extends JpaRepository<IngredientToRecipe, Integer> {
 
-    @Query(value = "select i from IngredientToRecipe i where i.id_recipe = ?1")
+    @Query(value = "select i from IngredientToRecipe i where i.recipe = ?1")
     List<IngredientToRecipe> findIngredientsByIdRecipe(Integer id);
+
+    List<IngredientToRecipe> findIngredientToRecipesByRecipeIsIn(List<Integer> list);
 }
