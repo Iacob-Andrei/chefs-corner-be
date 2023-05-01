@@ -23,4 +23,9 @@ public class Category {
     private Recipe recipe;
 
     private String category;
+
+    public Category(Recipe recipe, String category) {
+        this.recipe = recipe;
+        this.category = category;
+    }
 }

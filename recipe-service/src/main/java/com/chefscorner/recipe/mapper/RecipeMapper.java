@@ -2,6 +2,7 @@ package com.chefscorner.recipe.mapper;
 
 import com.chefscorner.recipe.dto.IngredientInRecipeDto;
 import com.chefscorner.recipe.dto.RecipeDto;
+import com.chefscorner.recipe.model.Category;
 import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.util.ImageUtil;
@@ -28,7 +29,7 @@ public class RecipeMapper {
                             .map(IngredientInRecipeDto::from)
                             .collect(Collectors.toList()))
                 .categories(recipe.getCategories().stream()
-                            .map(CategoryMapper::categoryToCategoryDto)
+                            .map(Category::getCategory)
                             .collect(Collectors.toList()))
                 .build();
     }
@@ -59,7 +60,7 @@ public class RecipeMapper {
                         .map(IngredientInRecipeDto::from)
                         .collect(Collectors.toList()))
                 .categories(recipe.getCategories().stream()
-                        .map(CategoryMapper::categoryToCategoryDto)
+                        .map(Category::getCategory)
                         .collect(Collectors.toList()))
                 .build();
     }

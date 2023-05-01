@@ -29,6 +29,7 @@ public class RecipeService {
 
     private final DirectionService directionService;
     private final RecipeRepository recipeRepository;
+    private final CategoryService categoryService;
     private final WebService webService;
 
     public RecipeDto getRecipeById(String bearerToken, Integer idRecipe) throws JSONException {
@@ -62,6 +63,7 @@ public class RecipeService {
 
         recipeRepository.save(recipe);
         directionService.saveDirections(requestData.getDirections(), recipe);
+        categoryService.saveCategories(requestData.getCategories(), recipe);
         webService.postIngredientsForRecipe(recipe.getId(), requestData.getIngredients());
 
         return RecipeDto.builder().id(recipe.getId()).build();

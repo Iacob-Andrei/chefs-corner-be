@@ -3,6 +3,7 @@ package com.chefscorner.recipe.service;
 import com.chefscorner.recipe.dto.PageDto;
 import com.chefscorner.recipe.exception.InvalidNumberPage;
 import com.chefscorner.recipe.mapper.RecipeMapper;
+import com.chefscorner.recipe.model.Category;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,12 @@ public class CategoryService {
                 .totalPages(slice.getTotalPages()-1)
                 .recipes(recipesInBatch.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList()))
                 .build();
+    }
+
+    public void saveCategories(List<String> categories, Recipe recipe) {
+        for(String categoryName : categories){
+            Category category = new Category(recipe, categoryName.replace(" ", ""));
+            categoryRepository.save(category);
+        }
     }
 }
