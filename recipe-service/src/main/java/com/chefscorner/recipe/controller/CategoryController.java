@@ -1,10 +1,14 @@
 package com.chefscorner.recipe.controller;
 
+import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.PageDto;
+import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -19,5 +23,10 @@ public class CategoryController {
     public ResponseEntity<PageDto> recipesByCategory(@PathVariable("category") String category,
                                                      @PathVariable("offset") Integer offset){
         return ResponseEntity.ok().body(categoryService.getRecipesFromCategories(category, offset));
+    }
+
+    @PostMapping("/complete-menu")
+    public ResponseEntity<List<RecipeDto>> completeMenu(@RequestBody CompleteMenuRequest currentMenu){
+        return ResponseEntity.ok().body(categoryService.addRecipesToMenu(currentMenu));
     }
 }
