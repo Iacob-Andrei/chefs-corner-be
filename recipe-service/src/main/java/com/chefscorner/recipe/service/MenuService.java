@@ -2,6 +2,7 @@ package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.MenuDto;
+import com.chefscorner.recipe.exception.MenuNotFoundException;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.MenuMapper;
 import com.chefscorner.recipe.model.IngredientInRecipe;
@@ -60,10 +61,10 @@ public class MenuService {
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
         Optional<Menu> menuOptional = menuRepository.findById(idMenu);
 
-        if(menuOptional.isEmpty()) throw new RecipeNotFoundException(idMenu); // TODO: de modificat
+        if(menuOptional.isEmpty()) throw new MenuNotFoundException(idMenu);
 
         Menu menu = menuOptional.get();
-        if(!menu.getOwner().equals(owner)) throw new RecipeNotFoundException(idMenu); // TODO: de modificat
+        if(!menu.getOwner().equals(owner)) throw new MenuNotFoundException(idMenu);
 
         List<Integer> recipesId = menu.getRecipes().stream().map(recipeInMenu -> recipeInMenu.getRecipe().getId()).toList();
         Map<Integer, List<IngredientInRecipe>> ingredients = webService.getIngredientsForRecipes(recipesId);
