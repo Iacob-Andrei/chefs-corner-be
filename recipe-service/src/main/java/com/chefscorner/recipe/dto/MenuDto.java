@@ -15,5 +15,6 @@ import java.util.Map;
 public class MenuDto {
     private Integer id;
     private String name;
+    private String description;
     private Map<String, List<RecipeDto>> recipes;
 }

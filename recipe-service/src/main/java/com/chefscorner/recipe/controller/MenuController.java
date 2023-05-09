@@ -19,9 +19,9 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping("")
-    public ResponseEntity<String> postMenu(@RequestHeader("Authorization") String bearerToken, @RequestBody CompleteMenuRequest menuDto) throws JSONException {
+    public ResponseEntity<?> postMenu(@RequestHeader("Authorization") String bearerToken, @RequestBody CompleteMenuRequest menuDto) throws JSONException {
         menuService.saveMenu(bearerToken, menuDto);
-        return ResponseEntity.ok().body("ok");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/owned")

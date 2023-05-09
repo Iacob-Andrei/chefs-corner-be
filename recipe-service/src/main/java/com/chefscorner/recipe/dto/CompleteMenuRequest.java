@@ -14,6 +14,7 @@ import java.util.Map;
 @Builder
 public class CompleteMenuRequest {
     private String name;
+    private String description;
     private Map<String, List<Integer>> currentMenu;
     private Map<String, Integer> requested;
 }

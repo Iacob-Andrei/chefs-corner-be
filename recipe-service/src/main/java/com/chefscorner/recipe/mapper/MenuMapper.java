@@ -29,6 +29,7 @@ public class MenuMapper {
         return MenuDto.builder()
                 .id(menu.getId())
                 .name(menu.getName())
+                .description(menu.getDescription())
                 .recipes(recipes)
                 .build();
     }
@@ -51,6 +52,7 @@ public class MenuMapper {
         return MenuDto.builder()
                 .id(menu.getId())
                 .name(menu.getName())
+                .description(menu.getDescription())
                 .recipes(recipes)
                 .build();
     }

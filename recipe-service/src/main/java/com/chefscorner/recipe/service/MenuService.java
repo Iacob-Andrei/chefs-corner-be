@@ -36,7 +36,7 @@ public class MenuService {
     @Transactional
     public void saveMenu(String bearerToken, CompleteMenuRequest menuDto) throws JSONException {
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
-        Menu menu = new Menu(menuDto.getName(), owner);
+        Menu menu = new Menu(menuDto.getName(), owner, menuDto.getDescription());
 
         menuRepository.save(menu);
         for(String category : menuDto.getCurrentMenu().keySet()){
