@@ -27,7 +27,7 @@ public class AuthService {
         try {
             repository.save(userInfo);
         } catch (Exception e){
-            throw new EmailNotUniqueException(userInfo.getEmail());
+            throw new EmailNotUniqueException();
         }
         TokenDto token = generateToken(userInfo.getEmail());
         token.setId(userInfo.getId());

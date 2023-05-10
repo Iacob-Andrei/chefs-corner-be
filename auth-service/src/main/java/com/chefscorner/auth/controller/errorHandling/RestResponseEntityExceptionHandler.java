@@ -1,6 +1,7 @@
 package com.chefscorner.auth.controller.errorHandling;
 
 import com.chefscorner.auth.exception.EmailNotUniqueException;
+import com.chefscorner.auth.exception.InvalidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,9 +13,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({
             EmailNotUniqueException.class
     })
+    public ResponseEntity<String> invalidRequestParameterExceptionMapper(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(ex.getMessage());
+    }
 
-    public ResponseEntity<ErrorMessage> invalidRequestParameterExceptionMapper(RuntimeException ex) {
-        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorMessage);
+    @ExceptionHandler({
+            InvalidTokenException.class
+    })
+    public ResponseEntity<String> invalidTokenException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(ex.getMessage());
     }
 }
