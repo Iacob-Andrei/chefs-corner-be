@@ -113,4 +113,18 @@ public class RecipeService {
 
         return recipeDtoList;
     }
+
+    public List<RecipeDto> getRecipesByIngredients(List<Integer> ids) {
+
+        Map<Integer, List<IngredientInRecipe>> mapIngredients = webService.getRecipesByIngredients(ids);
+        List<Integer> recipeIds = mapIngredients.keySet().stream().toList();
+        List<Recipe> response = recipeRepository.findRecipesByIdIn(recipeIds);
+
+        List<RecipeDto> recipeDtoList = new ArrayList<>();
+        for(Recipe recipe : response){
+            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(recipe, mapIngredients.get(recipe.getId())));
+        }
+
+        return recipeDtoList;
+    }
 }

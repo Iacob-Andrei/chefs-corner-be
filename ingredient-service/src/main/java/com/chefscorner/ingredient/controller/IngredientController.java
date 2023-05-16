@@ -40,4 +40,9 @@ public class IngredientController {
         ingredientToRecipeService.addIngredientsNeeded(idRecipe, ingredients);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/recommendation")
+    public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getRecommendationWithIngredients(@RequestBody List<Integer> ids){
+        return ResponseEntity.ok().body(ingredientToRecipeService.getRecipesByIngredients(ids));
+    }
 }

@@ -14,4 +14,7 @@ public interface IngredientToRecipeRepository extends JpaRepository<IngredientTo
     List<IngredientToRecipe> findIngredientsByIdRecipe(Integer id);
 
     List<IngredientToRecipe> findIngredientToRecipesByRecipeIsIn(List<Integer> list);
+
+    @Query(value = "SELECT i.recipe from IngredientToRecipe i WHERE i.ingredient.id IN ?1 GROUP BY i.recipe HAVING COUNT(DISTINCT i.ingredient.id) >= ?2")
+    List<Integer> findRecipesContainingIngredients(List<Integer> ids, Integer size);
 }

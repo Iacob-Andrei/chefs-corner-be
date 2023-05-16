@@ -41,6 +41,17 @@ public class WebService {
                 .block();
     }
 
+    public Map<Integer, List<IngredientInRecipe>> getRecipesByIngredients(List<Integer> ids){
+        return webClientBuilder.build()
+                .post()
+                .uri("http://ingredient-service/api/ingredient/recommendation")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(ids)
+                .retrieve()
+                .bodyToMono(MAP_TYPE_REF)
+                .block();
+    }
+
     public void postIngredientsForRecipe(Integer idRecipe, List<IngredientInRecipeDto> ingredients){
         webClientBuilder.build()
                 .post()
