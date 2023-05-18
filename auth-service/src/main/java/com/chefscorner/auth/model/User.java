@@ -23,6 +23,7 @@ public class User {
     private String email;
     private String password;
     private boolean business;
+    private boolean confirmed;
     @Column(name = "data", columnDefinition = "BLOB")
     private byte[] data;
 
@@ -32,5 +33,6 @@ public class User {
         this.password = password;
         this.business = business;
         this.data = new byte[0];
+        this.confirmed = false;
     }
 }

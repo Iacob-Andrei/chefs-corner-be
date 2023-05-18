@@ -1,5 +1,6 @@
 package com.chefscorner.auth.controller.errorHandling;
 
+import com.chefscorner.auth.exception.EmailNotConfirmedException;
 import com.chefscorner.auth.exception.EmailNotUniqueException;
 import com.chefscorner.auth.exception.InvalidTokenException;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({
-            InvalidTokenException.class
+            InvalidTokenException.class,
+            EmailNotConfirmedException.class
     })
     public ResponseEntity<String> invalidTokenException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(ex.getMessage());

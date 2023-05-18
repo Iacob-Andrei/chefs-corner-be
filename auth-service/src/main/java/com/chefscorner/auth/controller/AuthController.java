@@ -29,8 +29,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<TokenDto> addNewUser(@RequestBody UserDto user) {
-        return ResponseEntity.ok().body(service.saveUser(user));
+    public ResponseEntity<?> addNewUser(@RequestBody UserDto user) {
+        service.saveUser(user);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/register/confirm")
+    public ResponseEntity<String> confirmUser(@RequestParam("token")String token){
+        return ResponseEntity.ok().body(service.confirmToken(token));
     }
 
     @PostMapping("/token")
@@ -38,6 +44,7 @@ public class AuthController {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
         if(authenticate.isAuthenticated()){
+            service.isConfirmed(authRequest.getEmail());
             return ResponseEntity.ok().body(service.generateToken(authRequest.getEmail()));
         }else{
             throw new InvalidTokenException();
