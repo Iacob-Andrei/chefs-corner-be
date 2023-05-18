@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,15 +25,24 @@ public class IngredientController {
         return ResponseEntity.ok().body(ingredientToRecipeService.getIngredientsByIdRecipe(id));
     }
 
+    @PostMapping("from-recipe/list")
+    public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getIngredientsByIdsRecipes(@RequestBody List<Integer> ids){
+        return ResponseEntity.ok().body(ingredientToRecipeService.getIngredientsByIdsRecipes(ids));
+    }
+
     @GetMapping("/{pattern}")
     public ResponseEntity<List<IngredientDto>> ingredientsByNamePattern(@PathVariable("pattern") String pattern){
         return ResponseEntity.ok().body(ingredientService.findIngredientsByNamePattern(pattern));
     }
 
     @PostMapping("/add/{idRecipe}")
-    public ResponseEntity<String> postIngredientsForRecipe(@PathVariable("idRecipe")Integer idRecipe, @RequestBody List<IngredientToRecipeDto> ingredients){
+    public ResponseEntity<?> postIngredientsForRecipe(@PathVariable("idRecipe")Integer idRecipe, @RequestBody List<IngredientToRecipeDto> ingredients){
         ingredientToRecipeService.addIngredientsNeeded(idRecipe, ingredients);
+        return ResponseEntity.ok().build();
+    }
 
-        return ResponseEntity.ok().body("ok");
+    @PostMapping("/recommendation")
+    public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getRecommendationWithIngredients(@RequestBody List<Integer> ids){
+        return ResponseEntity.ok().body(ingredientToRecipeService.getRecipesByIngredients(ids));
     }
 }

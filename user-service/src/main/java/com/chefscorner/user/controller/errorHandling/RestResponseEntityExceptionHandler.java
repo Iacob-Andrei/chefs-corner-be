@@ -13,8 +13,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             EmailNotFoundException.class
     })
 
-    public ResponseEntity<ErrorMessage> invalidRequestParameterExceptionMapper(RuntimeException ex) {
-        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorMessage);
+    public ResponseEntity<String> invalidRequestParameterExceptionMapper(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(ex.getMessage());
     }
 }

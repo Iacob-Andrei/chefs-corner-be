@@ -24,6 +24,6 @@ public class RecipeDto {
     private byte[] file;
     private String image;
     private List<DirectionDto> directions;
-    private List<CategoryDto> categories;
+    private List<String> categories;
     private List<IngredientInRecipeDto> ingredients;
 }

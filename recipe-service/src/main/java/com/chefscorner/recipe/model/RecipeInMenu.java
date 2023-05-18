@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name= "category")
-public class Category {
+@Table(name= "recipe_in_menu")
+public class RecipeInMenu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +22,15 @@ public class Category {
     @JoinColumn(name = "id_recipe")
     private Recipe recipe;
 
+    @ManyToOne
+    @JoinColumn(name = "id_menu")
+    private Menu menu;
+
     private String category;
 
-    public Category(Recipe recipe, String category) {
+    public RecipeInMenu(Recipe recipe, Menu menu, String category) {
         this.recipe = recipe;
+        this.menu = menu;
         this.category = category;
     }
 }

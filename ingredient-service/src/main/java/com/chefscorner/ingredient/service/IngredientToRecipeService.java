@@ -11,8 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -44,5 +43,27 @@ public class IngredientToRecipeService {
             );
             ingredientToRecipeRepository.save(ingredientToRecipe);
         }
+    }
+
+    public Map<Integer,List<IngredientToRecipeDto>> getIngredientsByIdsRecipes(List<Integer> ids) {
+        List<IngredientToRecipe> response = ingredientToRecipeRepository.findIngredientToRecipesByRecipeIsIn(ids);
+        Map<Integer, List<IngredientToRecipeDto>> mapIngredients = new HashMap<>();
+
+        for(Integer id : ids){
+            mapIngredients.put(
+                    id,
+                    response.stream()
+                            .filter(el -> Objects.equals(el.getRecipe(), id))
+                            .map(IngredientToRecipeMapper::ingredientToRecipeToIngredientToRecipeDto).collect(Collectors.toList())
+            );
+        }
+        return mapIngredients;
+    }
+
+    public Map<Integer,List<IngredientToRecipeDto>> getRecipesByIngredients(List<Integer> ids) {
+        List<Integer> result = ingredientToRecipeRepository.findRecipesContainingIngredients(ids, ids.size());
+        Collections.shuffle(result);
+        int max = Math.min(result.size(), 10);
+        return this.getIngredientsByIdsRecipes(result.subList(0,max));
     }
 }
