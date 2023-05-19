@@ -1,5 +1,6 @@
 package com.chefscorner.auth.service;
 
+import com.chefscorner.auth.exception.InvalidTokenException;
 import com.chefscorner.auth.model.ConfirmationToken;
 import com.chefscorner.auth.model.User;
 import com.chefscorner.auth.repository.ConfirmationTokenRepository;
@@ -31,7 +32,7 @@ public class ConfirmationTokenService {
 
     public ConfirmationToken getToken(String token) {
         Optional<ConfirmationToken> optional = confirmationTokenRepository.findConfirmationTokenByToken(token);
-        if(optional.isEmpty()) throw new RuntimeException("TOKEN NOT FOUND TODO");
+        if(optional.isEmpty()) throw new InvalidTokenException();
 
         return optional.get();
     }

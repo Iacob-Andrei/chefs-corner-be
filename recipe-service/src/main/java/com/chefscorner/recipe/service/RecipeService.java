@@ -1,6 +1,7 @@
 package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.RecipeDto;
+import com.chefscorner.recipe.exception.RecipeForbiddenException;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.RecipeMapper;
 import com.chefscorner.recipe.model.IngredientInRecipe;
@@ -38,7 +39,7 @@ public class RecipeService {
         if(!recipe.getOwner().equals("public")){
             String email = JwtUtil.getSubjectFromToken(bearerToken);
             if(!recipe.getOwner().equals(email) && !webService.getUsersPermissions(email).contains(idRecipe)) {
-                throw new RecipeNotFoundException(idRecipe);
+                throw new RecipeForbiddenException();
             }
         }
 

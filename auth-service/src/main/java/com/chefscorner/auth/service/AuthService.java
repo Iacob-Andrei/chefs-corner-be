@@ -54,7 +54,7 @@ public class AuthService {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
 
         if (confirmationToken.getConfirmed() != null) {
-            throw new RuntimeException("email already confirmed TODO");
+            return "Email already confirmed!";
         }
 
         if(confirmationToken.getExpires().isBefore(LocalDateTime.now())){
