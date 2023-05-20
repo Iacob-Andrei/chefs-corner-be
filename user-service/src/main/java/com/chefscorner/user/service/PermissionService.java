@@ -1,10 +1,10 @@
 package com.chefscorner.user.service;
 
 import com.chefscorner.user.dto.PermissionDto;
+import com.chefscorner.user.dto.RequestPermissionDto;
 import com.chefscorner.user.dto.ResponseDto;
 import com.chefscorner.user.exception.EmailNotFoundException;
 import com.chefscorner.user.exception.RequestNotFoundException;
-import com.chefscorner.user.exception.TokenExpiredException;
 import com.chefscorner.user.model.Permission;
 import com.chefscorner.user.model.PermissionRequest;
 import com.chefscorner.user.model.User;
@@ -86,13 +86,56 @@ public class PermissionService {
         }
 
         if(request.getExpires().isBefore(LocalDateTime.now())){
-            throw new TokenExpiredException();
+            permissionRequestService.deleteToken(token);
+            throw new RequestNotFoundException();
         }
 
         Permission permission = new Permission(request.getIdRecipe(), request.getRequester());
         repository.save(permission);
 
-        permissionRequestService.setConfirmedAt(request);
+        permissionRequestService.deleteToken(token);
+
+        return ResponseDto.builder().data(true).build();
+    }
+
+    @Transactional
+    public RequestPermissionDto getRequestPermissionInfo(String bearerToken, String token) throws JSONException {
+        PermissionRequest request = permissionRequestService.getToken(token);
+        String requesterMail = JwtUtil.getSubjectFromToken(bearerToken);
+
+        if(!request.getOwner().equals(requesterMail) || request.getConfirmed() != null){
+            throw new RequestNotFoundException();
+        }
+
+        if(request.getExpires().isBefore(LocalDateTime.now())){
+            permissionRequestService.deleteToken(token);
+            throw new RequestNotFoundException();
+        }
+
+        Optional<User> optionalRequester = userRepository.findByEmail(request.getRequester());
+        if(optionalRequester.isEmpty()) throw new EmailNotFoundException(requesterMail);
+        User requester = optionalRequester.get();
+
+        List<String> data = webService.getRecipeOwnerEmail(request.getIdRecipe());
+        String nameRecipe = data.get(1);
+
+        return RequestPermissionDto.builder()
+                .requesterEmail(requester.getEmail())
+                .requesterName(requester.getName())
+                .recipeName(nameRecipe)
+                .build();
+    }
+
+    @Transactional
+    public ResponseDto deletePermissionRequestForRecipe(String bearerToken, String token) throws JSONException {
+        PermissionRequest request = permissionRequestService.getToken(token);
+        String requesterMail = JwtUtil.getSubjectFromToken(bearerToken);
+
+        if(!request.getOwner().equals(requesterMail) || request.getConfirmed() != null){
+            throw new RequestNotFoundException();
+        }
+        permissionRequestService.deleteToken(token);
+
         return ResponseDto.builder().data(true).build();
     }
 }

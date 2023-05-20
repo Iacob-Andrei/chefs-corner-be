@@ -40,8 +40,7 @@ public class PermissionRequestService {
         return optional.get();
     }
 
-    public void setConfirmedAt(PermissionRequest request){
-        request.setConfirmed(LocalDateTime.now());
-        permissionRequestRepository.save(request);
+    public void deleteToken(String token) {
+        permissionRequestRepository.deletePermissionRequestByToken(token);
     }
 }

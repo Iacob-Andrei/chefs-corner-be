@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PermissionRequestRepository extends JpaRepository<PermissionRequest, Integer> {
 
     Optional<PermissionRequest> findPermissionRequestByToken(String token);
+    void deletePermissionRequestByToken(String token);
 }

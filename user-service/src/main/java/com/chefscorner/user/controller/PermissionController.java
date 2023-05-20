@@ -1,6 +1,7 @@
 package com.chefscorner.user.controller;
 
 import com.chefscorner.user.dto.PermissionDto;
+import com.chefscorner.user.dto.RequestPermissionDto;
 import com.chefscorner.user.dto.ResponseDto;
 import com.chefscorner.user.service.PermissionService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,11 @@ public class PermissionController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/request")
+    public ResponseEntity<RequestPermissionDto> getRequestPermissionInfo(@RequestHeader("Authorization") String bearerToken, @RequestParam("token")String token) throws JSONException {
+        return ResponseEntity.ok().body(permissionService.getRequestPermissionInfo(bearerToken, token));
+    }
+
     @GetMapping("/ask/{id}")
     public ResponseEntity<ResponseDto> askPermissionForRecipe(@RequestHeader("Authorization") String bearerToken, @PathVariable Integer id) throws JSONException {
         return ResponseEntity.ok().body(permissionService.askPermissionForRecipe(bearerToken, id));
@@ -56,5 +62,10 @@ public class PermissionController {
     @GetMapping("/confirm")
     public ResponseEntity<ResponseDto> confirmPermissionForRecipe(@RequestHeader("Authorization") String bearerToken, @RequestParam("token")String token) throws JSONException {
         return ResponseEntity.ok().body(permissionService.confirmPermissionForRecipe(bearerToken, token));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDto> deletePermissionRequestForRecipe(@RequestHeader("Authorization") String bearerToken, @RequestParam("token")String token) throws JSONException {
+        return ResponseEntity.ok().body(permissionService.deletePermissionRequestForRecipe(bearerToken, token));
     }
 }
