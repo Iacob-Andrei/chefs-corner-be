@@ -1,6 +1,7 @@
 package com.chefscorner.user.service;
 
 import com.chefscorner.user.dto.PermissionDto;
+import com.chefscorner.user.dto.ResponseDto;
 import com.chefscorner.user.exception.EmailNotFoundException;
 import com.chefscorner.user.exception.RequestNotFoundException;
 import com.chefscorner.user.exception.TokenExpiredException;
@@ -54,7 +55,7 @@ public class PermissionService {
     }
 
     @Transactional
-    public void askPermissionForRecipe(String bearerToken, Integer idRecipe) throws JSONException {
+    public ResponseDto askPermissionForRecipe(String bearerToken, Integer idRecipe) throws JSONException {
         String requesterMail = JwtUtil.getSubjectFromToken(bearerToken);
         Optional<User> requesterOptional = userRepository.findByEmail(requesterMail);
 
@@ -72,10 +73,11 @@ public class PermissionService {
         User requester = requesterOptional.get();
 
         permissionRequestService.savePermissionRequest(owner, requester, nameRecipe, idRecipe);
+        return ResponseDto.builder().data(true).build();
     }
 
     @Transactional
-    public void confirmPermissionForRecipe(String bearerToken, String token) throws JSONException {
+    public ResponseDto confirmPermissionForRecipe(String bearerToken, String token) throws JSONException {
         PermissionRequest request = permissionRequestService.getToken(token);
         String requesterMail = JwtUtil.getSubjectFromToken(bearerToken);
 
@@ -91,5 +93,6 @@ public class PermissionService {
         repository.save(permission);
 
         permissionRequestService.setConfirmedAt(request);
+        return ResponseDto.builder().data(true).build();
     }
 }
