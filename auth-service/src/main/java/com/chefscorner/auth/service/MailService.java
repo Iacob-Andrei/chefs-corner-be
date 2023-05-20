@@ -42,25 +42,4 @@ public class MailService {
            System.err.println(e.getMessage());
        }
     }
-
-    public void sendRequestPermission(String to, String nameTo, String token, String nameRequester){
-        Context context = new Context();
-
-        String process = templateEngine.process("request-permission", context);
-
-        try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-
-            helper.setText(process, true);
-            helper.setTo(to);
-            helper.setSubject("Grant permission");
-            helper.setFrom(sender);
-
-            mailSender.send(mimeMessage);
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
 }

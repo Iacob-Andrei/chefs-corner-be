@@ -72,7 +72,7 @@
 <body style="background-color: #e9ecef;">
 
 <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
-    Finish your account registration
+    Check this access request
 </div>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -85,8 +85,8 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                             <tr>
                                 <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-                                    <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Confirm Your Email Address</h1>
-                                    <h2 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;" th:text="${name}"></h2>
+                                    <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Allow access to recipe?</h1>
+                                    <h2 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;" th:text="'Hi ' + ${nameTo}+ ','"></h2>
                                 </td>
                             </tr>
                         </table>
@@ -104,7 +104,7 @@
 
                             <tr>
                                 <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                                    <p style="margin: 0;">Thank you for registering. Please click on the below link to activate your account:</p>
+                                    <p style="margin: 0;" th:text="${nameRequester} + ' (' + ${emailRequester} + ') would like to access `' + ${recipeName} + '`. Click the button bellow to allow access.'"></p>
                                 </td>
                             </tr>
 
@@ -116,7 +116,7 @@
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                     <tr>
                                                         <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                                                            <a target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;" th:href="@{${link}}">Confirm your email</a>
+                                                            <a target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;" th:href="@{${link}}">Grand access</a>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -128,7 +128,7 @@
 
                             <tr>
                                 <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                                    <p style="margin: 0;">Link will expire in 15 minutes.</p>
+                                    <p style="margin: 0;">Link will expire in 30 minutes.</p>
                                     <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
                                     <p style="margin: 0;" th:text="${link}"><a th:href="@{link}" target="_blank"></a></p>
                                 </td>

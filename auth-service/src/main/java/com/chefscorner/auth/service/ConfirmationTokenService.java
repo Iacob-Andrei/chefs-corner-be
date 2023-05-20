@@ -23,7 +23,7 @@ public class ConfirmationTokenService {
         ConfirmationToken token = new ConfirmationToken(
                 tokenStr,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusMinutes(30),
                 user
                 );
         confirmationTokenRepository.save(token);

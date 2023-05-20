@@ -58,7 +58,7 @@ public class AuthService {
         }
 
         if(confirmationToken.getExpires().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("token expired");
+            return "Token expired";
         }
 
         confirmationTokenService.setConfirmedAt(confirmationToken);
