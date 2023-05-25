@@ -20,13 +20,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{category},{offset}")
-    public ResponseEntity<PageDto> recipesByCategory(@PathVariable("category") String category,
+    public ResponseEntity<PageDto> recipesByCategoryOffset(@PathVariable("category") String category,
                                                      @PathVariable("offset") Integer offset){
-        return ResponseEntity.ok().body(categoryService.getRecipesFromCategories(category, offset));
+        return ResponseEntity.ok().body(categoryService.getRecipesFromCategoriesOffset(category, offset));
     }
 
     @PostMapping("/complete-menu")
     public ResponseEntity<List<RecipeDto>> completeMenu(@RequestBody CompleteMenuRequest currentMenu){
         return ResponseEntity.ok().body(categoryService.addRecipesToMenu(currentMenu));
+    }
+
+    @GetMapping("/{category}")
+    public ResponseEntity<List<RecipeDto>> recipesByCategory(@PathVariable("category") String category){
+        return ResponseEntity.ok().body(categoryService.getRecipesFromCategory(category));
     }
 }

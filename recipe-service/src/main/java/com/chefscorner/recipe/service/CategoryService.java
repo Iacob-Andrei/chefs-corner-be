@@ -30,7 +30,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final WebService webService;
 
-    public PageDto getRecipesFromCategories(String category, Integer page) {
+    public PageDto getRecipesFromCategoriesOffset(String category, Integer page) {
         if(page < 0){ throw new InvalidNumberPage(page, category); }
 
         Page<Recipe> slice = category.equals("") ? categoryRepository.findByPage(PageRequest.of(page, 20)) :
@@ -93,5 +93,13 @@ public class CategoryService {
             }
         }
         return allRecipesInMenu;
+    }
+
+    public List<RecipeDto> getRecipesFromCategory(String category) {
+        List<Recipe> recipesInCategory = categoryRepository.findCategory(category);
+        Collections.shuffle(recipesInCategory);
+        recipesInCategory = recipesInCategory.subList(0, Math.min(recipesInCategory.size(), 10));
+
+        return recipesInCategory.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList());
     }
 }

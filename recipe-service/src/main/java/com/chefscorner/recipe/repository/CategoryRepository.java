@@ -20,6 +20,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query("SELECT DISTINCT(c.recipe) FROM Category c")
     Page<Recipe> findByPage(Pageable page);
 
-    @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE lower(trim(c.category)) = lower(trim(?1)) AND c.id <= 9565")
+    @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE lower(trim(c.category)) = lower(trim(?1)) AND c.id <= 9565 AND c.recipe.image != 'images/recipe_image_placeholder.jpg'")
     List<Recipe> findCategory(String category);
 }
