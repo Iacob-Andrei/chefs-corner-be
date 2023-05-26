@@ -1,5 +1,6 @@
 package com.chefscorner.user.service;
 
+import com.chefscorner.user.dto.MailRequestBodyDto;
 import com.chefscorner.user.exception.RequestNotFoundException;
 import com.chefscorner.user.model.PermissionRequest;
 import com.chefscorner.user.model.User;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class PermissionRequestService {
 
     private final PermissionRequestRepository permissionRequestRepository;
-    private final MailService mailService;
+    private final WebService webService;
 
     public void savePermissionRequest(User owner, User requester, String nameRecipe, Integer idRecipe){
         String token = UUID.randomUUID().toString();
@@ -29,8 +30,7 @@ public class PermissionRequestService {
                 requester.getEmail()
         );
         permissionRequestRepository.save(permissionRequest);
-        
-        mailService.sendRequestPermission(token, owner, requester, nameRecipe);
+        webService.sendMailRequestPermission(new MailRequestBodyDto(token, owner, requester, nameRecipe));
     }
 
     public PermissionRequest getToken(String token){

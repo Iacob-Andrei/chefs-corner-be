@@ -1,5 +1,6 @@
 package com.chefscorner.user.service;
 
+import com.chefscorner.user.dto.MailRequestBodyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -23,6 +24,17 @@ public class WebService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(LIST_STR_TYPE_REF)
+                .block();
+    }
+
+    public void sendMailRequestPermission(MailRequestBodyDto mailBody){
+        webClientBuilder.build()
+                .post()
+                .uri("http://mail-service/api/mail/request")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mailBody)
+                .retrieve()
+                .bodyToMono(String.class)
                 .block();
     }
 }

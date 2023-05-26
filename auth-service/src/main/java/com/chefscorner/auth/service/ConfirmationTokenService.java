@@ -1,5 +1,6 @@
 package com.chefscorner.auth.service;
 
+import com.chefscorner.auth.dto.ConfirmationBodyDto;
 import com.chefscorner.auth.exception.InvalidTokenException;
 import com.chefscorner.auth.model.ConfirmationToken;
 import com.chefscorner.auth.model.User;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class ConfirmationTokenService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
-    private final MailService mailService;
+    private final WebService webService;
 
     public void saveConfirmationToken(User user){
         String tokenStr = UUID.randomUUID().toString();
@@ -27,7 +28,7 @@ public class ConfirmationTokenService {
                 user
                 );
         confirmationTokenRepository.save(token);
-        mailService.sendConfirmationMail(user.getEmail(), tokenStr, user.getName());
+        webService.sendMailConfirmAccount(new ConfirmationBodyDto(user.getEmail(), tokenStr, user.getName()));
     }
 
     public ConfirmationToken getToken(String token) {
