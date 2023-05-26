@@ -22,6 +22,7 @@ public class CategoryController {
     @GetMapping("/{category},{offset}")
     public ResponseEntity<PageDto> recipesByCategory(@PathVariable("category") String category,
                                                      @PathVariable("offset") Integer offset){
+
         return ResponseEntity.ok().body(categoryService.getRecipesFromCategories(category, offset));
     }
 
