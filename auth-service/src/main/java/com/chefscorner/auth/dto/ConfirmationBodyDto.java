@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class TokenDto {
+public class ConfirmationBodyDto {
+    private String to;
     private String token;
+    private String name;
 }

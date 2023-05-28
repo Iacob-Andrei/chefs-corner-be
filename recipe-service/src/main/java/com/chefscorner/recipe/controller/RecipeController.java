@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -58,5 +59,11 @@ public class RecipeController {
     @DeleteMapping("/{id}")
     public void deleteRecipe(@RequestHeader("Authorization") String bearerToken,@PathVariable("id")Integer id) throws JSONException {
         recipeService.deleteRecipe(bearerToken, id);
+    }
+
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<List<String>> getRecipeOwnerEmail(@PathVariable Integer id){
+        System.out.println(id);
+        return ResponseEntity.ok().body(recipeService.getRecipeOwnerEmail(id));
     }
 }

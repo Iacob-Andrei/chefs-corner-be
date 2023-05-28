@@ -1,6 +1,7 @@
 package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.RecipeDto;
+import com.chefscorner.recipe.exception.RecipeForbiddenException;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.RecipeMapper;
 import com.chefscorner.recipe.model.IngredientInRecipe;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +41,7 @@ public class RecipeService {
         if(!recipe.getOwner().equals("public")){
             String email = JwtUtil.getSubjectFromToken(bearerToken);
             if(!recipe.getOwner().equals(email) && !webService.getUsersPermissions(email).contains(idRecipe)) {
-                throw new RecipeNotFoundException(idRecipe);
+                throw new RecipeForbiddenException();
             }
         }
 
@@ -126,5 +129,12 @@ public class RecipeService {
         }
 
         return recipeDtoList;
+    }
+
+    public List<String> getRecipeOwnerEmail(Integer id) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+        if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(id);
+
+        return Arrays.asList(recipeOptional.get().getOwner(), recipeOptional.get().getName());
     }
 }

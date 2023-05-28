@@ -1,4 +1,4 @@
-package com.chefscorner.auth.dto;
+package com.chefscorner.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class TokenDto {
-    private String token;
+public class ResponseDto {
+    private boolean data;
 }

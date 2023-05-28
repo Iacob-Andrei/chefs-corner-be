@@ -1,4 +1,4 @@
-package com.chefscorner.auth.dto;
+package com.chefcornerbe.mail.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class TokenDto {
+public class ConfirmationBodyDto {
+    private String to;
     private String token;
+    private String name;
 }
