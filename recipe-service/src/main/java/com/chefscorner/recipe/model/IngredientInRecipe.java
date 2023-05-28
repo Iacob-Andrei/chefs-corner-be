@@ -1,6 +1,5 @@
 package com.chefscorner.recipe.model;
 
-import com.chefscorner.recipe.dto.IngredientInRecipeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
