@@ -1,14 +1,19 @@
 package com.chefscorner.ingredient.service;
 
 import com.chefscorner.ingredient.dto.IngredientToRecipeDto;
+import com.chefscorner.ingredient.dto.IngredientPriceDto;
 import com.chefscorner.ingredient.exception.IngredientNotFoundException;
 import com.chefscorner.ingredient.mapper.IngredientToRecipeMapper;
 import com.chefscorner.ingredient.model.Ingredient;
+import com.chefscorner.ingredient.model.IngredientPrice;
 import com.chefscorner.ingredient.model.IngredientToRecipe;
+import com.chefscorner.ingredient.repository.IngredientPriceRepository;
 import com.chefscorner.ingredient.repository.IngredientRepository;
 import com.chefscorner.ingredient.repository.IngredientToRecipeRepository;
+import com.chefscorner.ingredient.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,6 +26,7 @@ public class IngredientToRecipeService {
 
     private final IngredientToRecipeRepository ingredientToRecipeRepository;
     private final IngredientRepository ingredientRepository;
+    private final IngredientPriceRepository ingredientPriceRepository;
 
     public List<IngredientToRecipeDto> getIngredientsByIdRecipe(Integer id) {
         List<IngredientToRecipe> ingredientsList= ingredientToRecipeRepository.findIngredientsByIdRecipe(id);
@@ -65,5 +71,28 @@ public class IngredientToRecipeService {
         Collections.shuffle(result);
         int max = Math.min(result.size(), 10);
         return this.getIngredientsByIdsRecipes(result.subList(0,max));
+    }
+
+    public void addPriceForIngredientInRecipe(String bearerToken, IngredientPriceDto body) throws JSONException {
+        Optional<Ingredient> optional = ingredientRepository.findById(body.getIdIngredient());
+        if(optional.isEmpty()) throw new IngredientNotFoundException(body.getIdIngredient().toString());
+
+        Ingredient ingredient = optional.get();
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+
+        ingredientPriceRepository.save(new IngredientPrice(owner, body.getSeller(), body.getPrice(), ingredient));
+    }
+
+    public void updatePriceForIngredientInRecipe(String bearerToken, IngredientPriceDto body) throws JSONException {
+        Optional<IngredientPrice> optional = ingredientPriceRepository.findById(body.getId());
+        if(optional.isEmpty()) throw new IngredientNotFoundException(body.getIdIngredient().toString());
+
+        IngredientPrice price = optional.get();
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+        if(!price.getOwner().equals(owner)) throw new IngredientNotFoundException(body.getIdIngredient().toString());
+
+        price.setPrice(body.getPrice());
+        price.setSeller(body.getSeller());
+        ingredientPriceRepository.save(price);
     }
 }

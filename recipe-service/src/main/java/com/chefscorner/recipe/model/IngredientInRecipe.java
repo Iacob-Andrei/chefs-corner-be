@@ -1,9 +1,12 @@
 package com.chefscorner.recipe.model;
 
+import com.chefscorner.recipe.dto.IngredientInRecipeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -19,4 +22,5 @@ public class IngredientInRecipe {
     private String description;
     private String unit;
     private Double grams;
+    private List<IngredientPrice> prices;
 }

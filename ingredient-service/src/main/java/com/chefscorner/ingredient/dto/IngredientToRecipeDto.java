@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -20,4 +22,5 @@ public class IngredientToRecipeDto {
     private String description;
     private String unit;
     private Double grams;
+    private List<IngredientPriceDto> prices;
 }

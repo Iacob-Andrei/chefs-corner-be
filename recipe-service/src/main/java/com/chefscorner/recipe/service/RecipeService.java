@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,14 +37,21 @@ public class RecipeService {
     public RecipeDto getRecipeById(String bearerToken, Integer idRecipe) throws JSONException {
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
 
+        String email = JwtUtil.getSubjectFromToken(bearerToken);
         if(!recipe.getOwner().equals("public")){
-            String email = JwtUtil.getSubjectFromToken(bearerToken);
             if(!recipe.getOwner().equals(email) && !webService.getUsersPermissions(email).contains(idRecipe)) {
                 throw new RecipeForbiddenException();
             }
         }
 
         List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
+        for(IngredientInRecipe ingredient : response){
+            ingredient.setPrices(
+                    ingredient.getPrices().stream()
+                            .filter(ingredientPrice -> ingredientPrice.getOwner().equals(email))
+                            .collect(Collectors.toList())
+            );
+        }
         return RecipeMapper.recipeToRecipeDto(recipe, response);
     }
 

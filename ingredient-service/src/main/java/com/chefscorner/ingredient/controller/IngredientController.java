@@ -2,9 +2,11 @@ package com.chefscorner.ingredient.controller;
 
 import com.chefscorner.ingredient.dto.IngredientDto;
 import com.chefscorner.ingredient.dto.IngredientToRecipeDto;
+import com.chefscorner.ingredient.dto.IngredientPriceDto;
 import com.chefscorner.ingredient.service.IngredientService;
 import com.chefscorner.ingredient.service.IngredientToRecipeService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +46,19 @@ public class IngredientController {
     @PostMapping("/recommendation")
     public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getRecommendationWithIngredients(@RequestBody List<Integer> ids){
         return ResponseEntity.ok().body(ingredientToRecipeService.getRecipesByIngredients(ids));
+    }
+
+    @PostMapping("/add-price")
+    public ResponseEntity<?> addPriceForIngredientInRecipe(@RequestHeader("Authorization") String bearerToken,
+                                                           @RequestBody IngredientPriceDto body) throws JSONException {
+        ingredientToRecipeService.addPriceForIngredientInRecipe(bearerToken, body);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/update-price")
+    public ResponseEntity<?> updatePriceForIngredientInRecipe(@RequestHeader("Authorization") String bearerToken,
+                                                           @RequestBody IngredientPriceDto body) throws JSONException {
+        ingredientToRecipeService.updatePriceForIngredientInRecipe(bearerToken, body);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -36,6 +36,13 @@ public class Ingredient {
     )
     private List<IngredientToRecipe> ingredientToRecipeList = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "ingredient",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<IngredientPrice> ingredientPrices = new ArrayList<>();
+
     public Ingredient(Integer id, String name, String image, String svg) {
         this.id = id;
         this.name = name;

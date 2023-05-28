@@ -1,7 +1,9 @@
 package com.chefscorner.ingredient.mapper;
 
 import com.chefscorner.ingredient.dto.IngredientDto;
+import com.chefscorner.ingredient.dto.IngredientPriceDto;
 import com.chefscorner.ingredient.model.Ingredient;
+import com.chefscorner.ingredient.model.IngredientPrice;
 
 public class IngredientMapper {
 
@@ -19,6 +21,15 @@ public class IngredientMapper {
         return  IngredientDto.builder()
                 .id(ingredient.getId())
                 .name(ingredient.getName())
+                .build();
+    }
+
+    public static IngredientPriceDto priceToPriceDto(IngredientPrice price){
+        return IngredientPriceDto.builder()
+                .id(price.getId())
+                .seller(price.getSeller())
+                .price(price.getPrice())
+                .owner(price.getOwner())
                 .build();
     }
 }
