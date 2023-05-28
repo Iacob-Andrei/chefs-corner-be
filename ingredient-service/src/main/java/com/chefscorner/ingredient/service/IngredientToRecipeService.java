@@ -95,4 +95,15 @@ public class IngredientToRecipeService {
         price.setSeller(body.getSeller());
         ingredientPriceRepository.save(price);
     }
+
+    public void deletePriceForIngredientInRecipe(String bearerToken, Integer id) throws JSONException {
+        Optional<IngredientPrice> optional = ingredientPriceRepository.findById(id);
+        if(optional.isEmpty()) throw new IngredientNotFoundException(id.toString());
+
+        IngredientPrice price = optional.get();
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+        if(!price.getOwner().equals(owner)) throw new IngredientNotFoundException(id.toString());
+
+        ingredientPriceRepository.delete(price);
+    }
 }

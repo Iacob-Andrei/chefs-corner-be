@@ -61,4 +61,11 @@ public class IngredientController {
         ingredientToRecipeService.updatePriceForIngredientInRecipe(bearerToken, body);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/delete-price/{id}")
+    public ResponseEntity<?> deletePriceForIngredientInRecipe(@RequestHeader("Authorization") String bearerToken,
+                                                              @PathVariable Integer id) throws JSONException {
+        ingredientToRecipeService.deletePriceForIngredientInRecipe(bearerToken, id);
+        return ResponseEntity.noContent().build();
+    }
 }
