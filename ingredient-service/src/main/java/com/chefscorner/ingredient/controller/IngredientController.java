@@ -49,10 +49,9 @@ public class IngredientController {
     }
 
     @PostMapping("/add-price")
-    public ResponseEntity<?> addPriceForIngredientInRecipe(@RequestHeader("Authorization") String bearerToken,
+    public ResponseEntity<IngredientPriceDto> addPriceForIngredientInRecipe(@RequestHeader("Authorization") String bearerToken,
                                                            @RequestBody IngredientPriceDto body) throws JSONException {
-        ingredientToRecipeService.addPriceForIngredientInRecipe(bearerToken, body);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(ingredientToRecipeService.addPriceForIngredientInRecipe(bearerToken, body));
     }
 
     @PatchMapping("/update-price")

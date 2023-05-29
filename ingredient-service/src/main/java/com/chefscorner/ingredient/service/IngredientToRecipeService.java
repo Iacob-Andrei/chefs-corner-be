@@ -3,6 +3,7 @@ package com.chefscorner.ingredient.service;
 import com.chefscorner.ingredient.dto.IngredientToRecipeDto;
 import com.chefscorner.ingredient.dto.IngredientPriceDto;
 import com.chefscorner.ingredient.exception.IngredientNotFoundException;
+import com.chefscorner.ingredient.mapper.IngredientMapper;
 import com.chefscorner.ingredient.mapper.IngredientToRecipeMapper;
 import com.chefscorner.ingredient.model.Ingredient;
 import com.chefscorner.ingredient.model.IngredientPrice;
@@ -73,14 +74,16 @@ public class IngredientToRecipeService {
         return this.getIngredientsByIdsRecipes(result.subList(0,max));
     }
 
-    public void addPriceForIngredientInRecipe(String bearerToken, IngredientPriceDto body) throws JSONException {
+    public IngredientPriceDto addPriceForIngredientInRecipe(String bearerToken, IngredientPriceDto body) throws JSONException {
         Optional<Ingredient> optional = ingredientRepository.findById(body.getIdIngredient());
         if(optional.isEmpty()) throw new IngredientNotFoundException(body.getIdIngredient().toString());
 
         Ingredient ingredient = optional.get();
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
 
-        ingredientPriceRepository.save(new IngredientPrice(owner, body.getSeller(), body.getPrice(), ingredient));
+        return IngredientMapper.priceToPriceDto(
+                ingredientPriceRepository.save(new IngredientPrice(owner, body.getSeller(), body.getPrice(), ingredient))
+        );
     }
 
     public void updatePriceForIngredientInRecipe(String bearerToken, IngredientPriceDto body) throws JSONException {
