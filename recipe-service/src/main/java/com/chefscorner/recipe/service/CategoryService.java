@@ -9,7 +9,6 @@ import com.chefscorner.recipe.model.Menu;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.model.RecipeInMenu;
 import com.chefscorner.recipe.repository.CategoryRepository;
-import com.chefscorner.recipe.repository.RecipeRepository;
 import com.chefscorner.recipe.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
