@@ -2,6 +2,7 @@ package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.MenuDto;
+import com.chefscorner.recipe.dto.RecipeInMenuDto;
 import com.chefscorner.recipe.exception.MenuNotFoundException;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
 import com.chefscorner.recipe.mapper.MenuMapper;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,21 +35,11 @@ public class MenuService {
     private final WebService webService;
 
 
-    @Transactional
     public void saveMenu(String bearerToken, CompleteMenuRequest menuDto) throws JSONException {
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
         Menu menu = new Menu(menuDto.getName(), owner, menuDto.getDescription());
 
         menuRepository.save(menu);
-        for(String category : menuDto.getCurrentMenu().keySet()){
-            for(Integer idRecipe : menuDto.getCurrentMenu().get(category)){
-                Optional<Recipe> recipeOptional = recipeRepository.findById(idRecipe);
-                if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(idRecipe);
-
-                RecipeInMenu recipeUsed = new RecipeInMenu(recipeOptional.get(), menu, category);
-                recipeInMenuRepository.save(recipeUsed);
-            }
-        }
     }
 
     public List<MenuDto> getUsersMenus(String bearerToken) throws JSONException {
@@ -70,5 +62,47 @@ public class MenuService {
         Map<Integer, List<IngredientInRecipe>> ingredients = webService.getIngredientsForRecipes(recipesId);
 
         return MenuMapper.menuToMenuDtoWithIngredients(menu, ingredients);
+    }
+
+    public void addRecipeToMenu(String bearerToken, RecipeInMenuDto body) throws JSONException {
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+
+        Optional<Recipe> optional = recipeRepository.findById(body.getIdRecipe());
+
+        if(optional.isEmpty()) throw new RecipeNotFoundException(body.getIdRecipe());
+        Recipe recipe = optional.get();
+        if(!recipe.getOwner().equals(owner) && !recipe.getOwner().equals("public")) throw new RecipeNotFoundException(body.getIdRecipe());
+
+        Menu menu = getMenu(body.getIdMenu(), owner);
+
+        if(menu.getRecipes().stream().noneMatch(item -> item.getRecipe().getId().equals(body.getIdRecipe()))) {
+            RecipeInMenu recipeInMenu = new RecipeInMenu(recipe, menu, body.getCategory());
+            recipeInMenuRepository.save(recipeInMenu);
+        }
+    }
+
+    public void removeRecipeFromMenu(String bearerToken, RecipeInMenuDto body) throws JSONException {
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+        Menu menu = getMenu(body.getIdMenu(), owner);
+
+        Optional<RecipeInMenu> recipeOptional = menu.getRecipes().stream().filter(item -> item.getRecipe().getId().equals(body.getIdRecipe())).findAny();
+        if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(body.getIdRecipe());
+
+        RecipeInMenu recipeInMenu = recipeOptional.get();
+        recipeInMenuRepository.deleteById(recipeInMenu.getId());
+    }
+
+    public Menu getMenu(Integer idMenu, String owner){
+        Optional<Menu> optionalMenu = menuRepository.findById(idMenu);
+        if(optionalMenu.isEmpty()) throw new MenuNotFoundException(idMenu);
+        Menu menu = optionalMenu.get();
+        if(!menu.getOwner().equals(owner)) throw new MenuNotFoundException(idMenu);
+
+        return menu;
+    }
+
+    public void addToMenu(Menu menu, Recipe recipe, String category){
+        RecipeInMenu recipeInMenu = new RecipeInMenu(recipe, menu, category);
+        recipeInMenuRepository.save(recipeInMenu);
     }
 }

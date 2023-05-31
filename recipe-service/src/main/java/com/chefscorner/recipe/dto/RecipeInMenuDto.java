@@ -1,20 +1,18 @@
 package com.chefscorner.recipe.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class CompleteMenuRequest {
+public class RecipeInMenuDto {
     private Integer idMenu;
-    private String name;
-    private String description;
-    private Map<String, Integer> requested;
+    private Integer idRecipe;
+    private String category;
 }

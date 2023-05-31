@@ -5,6 +5,7 @@ import com.chefscorner.recipe.dto.PageDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,9 @@ public class CategoryController {
     }
 
     @PostMapping("/complete-menu")
-    public ResponseEntity<List<RecipeDto>> completeMenu(@RequestBody CompleteMenuRequest currentMenu){
-        return ResponseEntity.ok().body(categoryService.addRecipesToMenu(currentMenu));
+    public ResponseEntity<List<RecipeDto>> completeMenu(@RequestHeader("Authorization") String bearerToken,
+                                                        @RequestBody CompleteMenuRequest currentMenu) throws JSONException {
+        categoryService.addRecipesToMenu(bearerToken, currentMenu);
+        return ResponseEntity.ok().build();
     }
 }

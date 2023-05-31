@@ -2,6 +2,7 @@ package com.chefscorner.recipe.controller;
 
 import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.MenuDto;
+import com.chefscorner.recipe.dto.RecipeInMenuDto;
 import com.chefscorner.recipe.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
@@ -32,5 +33,19 @@ public class MenuController {
     @GetMapping("/{idMenu}")
     public ResponseEntity<MenuDto> getMenuInfo(@RequestHeader("Authorization") String bearerToken, @PathVariable("idMenu")Integer idMenu) throws JSONException{
         return ResponseEntity.ok().body(menuService.getMenu(bearerToken, idMenu));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addRecipeToMenu(@RequestHeader("Authorization") String bearerToken,
+                                             @RequestBody RecipeInMenuDto body) throws JSONException {
+        menuService.addRecipeToMenu(bearerToken, body);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<?> removeRecipeFromMenu(@RequestHeader("Authorization") String bearerToken,
+                                                  @RequestBody RecipeInMenuDto body) throws JSONException {
+        menuService.removeRecipeFromMenu(bearerToken, body);
+        return ResponseEntity.ok().build();
     }
 }

@@ -67,4 +67,9 @@ public class IngredientController {
         ingredientToRecipeService.deletePriceForIngredientInRecipe(bearerToken, id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/list-prices")
+    public ResponseEntity<List<IngredientDto>> getPricesForIngredientOfUser(@RequestHeader("Authorization") String bearerToken) throws JSONException{
+        return ResponseEntity.ok().body(ingredientService.getPricesForIngredientOfUser(bearerToken));
+    }
 }
