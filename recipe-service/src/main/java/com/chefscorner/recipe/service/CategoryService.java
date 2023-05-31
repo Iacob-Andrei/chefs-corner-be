@@ -27,10 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
     private final MenuService menuService;
-    private final WebService webService;
 
     public PageDto getRecipesFromCategories(String category, Integer page) {
         if(page < 0){ throw new InvalidNumberPage(page, category); }
