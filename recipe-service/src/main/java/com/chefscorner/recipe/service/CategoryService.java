@@ -2,12 +2,9 @@ package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.PageDto;
-import com.chefscorner.recipe.dto.RecipeDto;
-import com.chefscorner.recipe.dto.RecipeInMenuDto;
 import com.chefscorner.recipe.exception.InvalidNumberPage;
 import com.chefscorner.recipe.mapper.RecipeMapper;
 import com.chefscorner.recipe.model.Category;
-import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Menu;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.model.RecipeInMenu;
@@ -21,11 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
