@@ -1,15 +1,15 @@
 package com.chefscorner.user.service;
 
+import com.chefscorner.user.dto.PatchImageBodyDto;
 import com.chefscorner.user.dto.UserDto;
 import com.chefscorner.user.exception.EmailNotFoundException;
 import com.chefscorner.user.model.User;
 import com.chefscorner.user.repository.UserRepository;
-import com.chefscorner.user.util.ImageUtil;
+import com.chefscorner.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,25 +20,19 @@ public class UserService {
 
     private final UserRepository repository;
 
-    public UserDto getUserByEmail(String email){
+    public UserDto getUserByEmail(String token) throws JSONException {
+        String email = JwtUtil.getSubjectFromToken(token);
+
         Optional<User> user = repository.findByEmail(email);
         return user.map(UserDto::userToUserDto).orElseThrow(()-> new EmailNotFoundException("User not found with email : " + email));
     }
 
-    public byte[] getUserImageByEmail(String email) {
-        Optional<User> userOptional = repository.findByEmail(email);
-        if(userOptional.isEmpty()) return null;
+    public void updateUserImage(PatchImageBodyDto body) {
+        Optional<User> userOptional = repository.findByEmail(body.getEmail());
+        if(userOptional.isEmpty()) throw new EmailNotFoundException(body.getEmail());
 
         User user = userOptional.get();
-        return ImageUtil.decompressImage(user.getData());
-    }
-
-    public void updateUserImage(String email, MultipartFile image) throws IOException {
-        Optional<User> userOptional = repository.findByEmail(email);
-        if(userOptional.isEmpty()) throw new EmailNotFoundException(email);
-
-        User user = userOptional.get();
-        user.setData(ImageUtil.compressImage(image.getBytes()));
+        user.setData(body.getImageId());
         repository.save(user);
     }
 

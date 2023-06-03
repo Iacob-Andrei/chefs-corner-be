@@ -1,16 +1,14 @@
 package com.chefscorner.recipe.controller;
 
+import com.chefscorner.recipe.dto.PatchDataDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -51,9 +49,10 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.saveRecipe(recipe));
     }
 
-    @PatchMapping("/image/{id}")
-    public void updateRecipeImage(@PathVariable("id")Integer id, @RequestParam MultipartFile image) throws IOException {
-        recipeService.updateRecipeImage(id, image);
+    @PatchMapping("/image")
+    public ResponseEntity<String> updateRecipeImage(@RequestBody PatchDataDto body) {
+        recipeService.updateRecipeImage(body);
+        return ResponseEntity.ok().body("ok");
     }
 
     @DeleteMapping("/{id}")
@@ -63,7 +62,6 @@ public class RecipeController {
 
     @GetMapping("/owner/{id}")
     public ResponseEntity<List<String>> getRecipeOwnerEmail(@PathVariable Integer id){
-        System.out.println(id);
         return ResponseEntity.ok().body(recipeService.getRecipeOwnerEmail(id));
     }
 }

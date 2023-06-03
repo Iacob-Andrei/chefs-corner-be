@@ -23,13 +23,12 @@ public class Direction {
     private Recipe recipe;
     private Integer step;
     private String instruction;
-    @Column(name = "video_data", columnDefinition = "BLOB")
-    private byte[] video_data;
+    private String video;
 
     public Direction(Recipe recipe, Integer order, String instruction) {
         this.recipe = recipe;
         this.step = order;
         this.instruction = instruction;
-        this.video_data = new byte[0];
+        this.video = "";
     }
 }

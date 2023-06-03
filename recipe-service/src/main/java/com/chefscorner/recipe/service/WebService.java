@@ -76,4 +76,14 @@ public class WebService {
                 .bodyToMono(Integer[].class)
                 .block()));
     }
+
+    public byte[] getFile(String fileName){
+        return webClientBuilder.build()
+                .get()
+                .uri("http://storage-service/api/file?id="+fileName)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(byte[].class)
+                .block();
+    }
 }

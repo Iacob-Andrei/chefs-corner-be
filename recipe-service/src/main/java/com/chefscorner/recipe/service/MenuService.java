@@ -44,7 +44,7 @@ public class MenuService {
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
         List<Menu> menus = menuRepository.findMenusByOwner(owner);
 
-        return menus.stream().map(MenuMapper::menuToMenuDtoWithoutIngredients).collect(Collectors.toList());
+        return menus.stream().map(menu -> MenuMapper.menuToMenuDtoWithoutIngredients(menu, webService)).collect(Collectors.toList());
     }
 
     public MenuDto getMenu(String bearerToken, Integer idMenu) throws JSONException {
@@ -59,7 +59,7 @@ public class MenuService {
         List<Integer> recipesId = menu.getRecipes().stream().map(recipeInMenu -> recipeInMenu.getRecipe().getId()).toList();
         Map<Integer, List<IngredientInRecipe>> ingredients = webService.getIngredientsForRecipes(recipesId);
 
-        return MenuMapper.menuToMenuDtoWithIngredients(menu, ingredients);
+        return MenuMapper.menuToMenuDtoWithIngredients(menu, ingredients, webService);
     }
 
     public void addRecipeToMenu(String bearerToken, RecipeInMenuDto body) throws JSONException {

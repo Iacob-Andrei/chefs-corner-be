@@ -1,7 +1,6 @@
 package com.chefscorner.user.dto;
 
 import com.chefscorner.user.model.User;
-import com.chefscorner.user.util.ImageUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ public class UserDto {
     private String name;
     private String email;
     private boolean business;
-    private byte[] image;
+    private String image;
 
     public static UserDto userToUserDto(User user){
         return UserDto.builder()
@@ -24,7 +23,7 @@ public class UserDto {
                 .name(user.getName())
                 .email(user.getEmail())
                 .business(user.isBusiness())
-                .image(ImageUtil.decompressImage(user.getData()))
+                .image(user.getData())
                 .build();
     }
 }

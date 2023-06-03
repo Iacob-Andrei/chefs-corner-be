@@ -1,6 +1,5 @@
 package com.chefscorner.auth.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,15 +23,14 @@ public class User {
     private String password;
     private boolean business;
     private boolean confirmed;
-    @Column(name = "data", columnDefinition = "BLOB")
-    private byte[] data;
+    private String data;
 
     public User(String name, String email, String password, boolean business) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.business = business;
-        this.data = new byte[0];
+        this.data = null;
         this.confirmed = false;
     }
 }

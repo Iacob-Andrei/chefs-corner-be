@@ -28,6 +28,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MenuService menuService;
+    private final WebService webService;
 
     public PageDto getRecipesFromCategories(String category, Integer page) {
         if(page < 0){ throw new InvalidNumberPage(page, category); }
@@ -42,7 +43,10 @@ public class CategoryService {
         return PageDto.builder()
                 .currentPage(page)
                 .totalPages(slice.getTotalPages()-1)
-                .recipes(recipesInBatch.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList()))
+                .recipes(recipesInBatch.stream().map( recipe -> RecipeMapper.recipeToRecipeDtoOnlyInfo(
+                        recipe,
+                        recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+                )).collect(Collectors.toList()))
                 .build();
     }
 
