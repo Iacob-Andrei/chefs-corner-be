@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableTransactionManagement
+//@OpenAPIDefinition(
+//        info = @Info(title = "Ingredient APIs", version = "1.0", description = "Ingredient Service APIs")
+//)
 public class IngredientServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(IngredientServiceApplication.class, args);

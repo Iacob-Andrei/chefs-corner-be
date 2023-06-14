@@ -2,6 +2,7 @@ package com.chefscorner.recipe.controller;
 
 import com.chefscorner.recipe.dto.PatchDataDto;
 import com.chefscorner.recipe.service.DirectionService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +19,7 @@ public class DirectionController {
 
     private final DirectionService directionService;
 
+    @Operation(summary = "Patch video instruction for direction.")
     @PatchMapping("/video")
     public ResponseEntity<String> patchDirectionVideo(@RequestBody PatchDataDto body) {
         directionService.patchDirectionVideo(body);

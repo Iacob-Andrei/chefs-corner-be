@@ -68,6 +68,7 @@ public class IngredientToRecipeService {
     }
 
     public Map<Integer,List<IngredientToRecipeDto>> getRecipesByIngredients(List<Integer> ids) {
+        //TODO: de adaugat
         List<Integer> result = ingredientToRecipeRepository.findRecipesContainingIngredients(ids, ids.size());
         Collections.shuffle(result);
         int max = Math.min(result.size(), 10);

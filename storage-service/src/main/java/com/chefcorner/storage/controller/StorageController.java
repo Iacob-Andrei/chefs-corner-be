@@ -1,6 +1,7 @@
 package com.chefcorner.storage.controller;
 
 import com.chefcorner.storage.service.StorageService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,11 +26,13 @@ public class StorageController {
 
     private final StorageService storageService;
 
+    @Operation(summary = "Download file.")
     @GetMapping("")
     public ResponseEntity<byte[]> downloadFile(@RequestParam("id")String id){
         return ResponseEntity.ok().body(storageService.downloadFile(id));
     }
 
+    @Operation(summary = "Upload direction video for recipe and order number.")
     @PatchMapping("/video/{idRecipe},{order}")
     public ResponseEntity<?> uploadDirectionVideo(@PathVariable("idRecipe")Integer idRecipe,
                                                   @PathVariable("order")Integer order,
@@ -38,6 +41,7 @@ public class StorageController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Upload profile picture for user.")
     @PatchMapping("/profile/{email}")
     public ResponseEntity<?> uploadProfilePicture(@PathVariable("email")String email,
                                                   @RequestParam MultipartFile image) throws IOException {
@@ -45,6 +49,7 @@ public class StorageController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Upload descriptive picture for recipe.")
     @PatchMapping("/recipe/{idRecipe}")
     public ResponseEntity<?> uploadRecipePicture(@PathVariable("idRecipe")Integer idRecipe,
                                                   @RequestParam MultipartFile image) throws IOException {
@@ -52,6 +57,7 @@ public class StorageController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Delete file.")
     @DeleteMapping("/delete/{fileName}")
     public void deleteFile(@PathVariable("fileName")String fileName){
         storageService.deleteFile(fileName);
