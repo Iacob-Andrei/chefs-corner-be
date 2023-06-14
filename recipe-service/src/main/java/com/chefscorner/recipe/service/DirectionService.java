@@ -6,6 +6,7 @@ import com.chefscorner.recipe.exception.DirectionNotFoundException;
 import com.chefscorner.recipe.model.Direction;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.DirectionRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,11 @@ public class DirectionService {
         Direction direction = directionOptional.get();
         direction.setVideo(body.getImageId());
         directionRepository.save(direction);
+    }
+
+    @Transactional
+    public void patchDirectionRecipes(Recipe recipe, List<DirectionDto> newDirections) {
+        directionRepository.deleteDirectionsByRecipe(recipe);
+        saveDirections(newDirections, recipe);
     }
 }

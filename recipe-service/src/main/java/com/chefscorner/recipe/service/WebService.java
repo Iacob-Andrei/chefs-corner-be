@@ -67,6 +67,21 @@ public class WebService {
                 .block();
     }
 
+    public void patchIngredientsForRecipe(Integer idRecipe, List<IngredientInRecipeDto> ingredients){
+        webClientBuilder.build()
+                .patch()
+                .uri("http://ingredient-service/api/ingredient/patch/" + idRecipe)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(ingredients)
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class)
+                        .doOnSuccess(body -> {
+                            if (!body.equals("ok")) {
+                                throw new IngredientNotFoundException(body);
+                            }
+                        }))
+                .block();
+    }
+
     public List<Integer> getUsersPermissions(String email){
         return List.of(Objects.requireNonNull(webClientBuilder.build()
                 .get()

@@ -110,4 +110,10 @@ public class IngredientToRecipeService {
 
         ingredientPriceRepository.delete(price);
     }
+
+    @Transactional
+    public void patchIngredientsNeeded(Integer idRecipe, List<IngredientToRecipeDto> ingredients) {
+        ingredientToRecipeRepository.deleteIngredientToRecipesByRecipe(idRecipe);
+        addIngredientsNeeded(idRecipe, ingredients);
+    }
 }

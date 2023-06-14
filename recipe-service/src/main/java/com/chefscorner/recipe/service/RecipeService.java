@@ -106,6 +106,27 @@ public class RecipeService {
         )).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void patchRecipe(String bearerToken, RecipeDto request) throws JSONException {
+        Optional<Recipe> optional = recipeRepository.findById(request.getId());
+        if(optional.isEmpty()) throw new RecipeNotFoundException(request.getId());
+
+        Recipe recipe = optional.get();
+        if(!recipe.getOwner().equals(JwtUtil.getSubjectFromToken(bearerToken))){
+            throw new RecipeNotFoundException(request.getId());
+        }
+
+        recipe.setName(request.getName());
+        recipe.setPrep_time(request.getPrep_time());
+        recipe.setCook_time(request.getCook_time());
+        recipe.setNumber_servings(request.getNumber_servings());
+        recipeRepository.save(recipe);
+
+        directionService.patchDirectionRecipes(recipe, request.getDirections());
+        categoryService.patchCategories(request.getCategories(), recipe);
+        webService.patchIngredientsForRecipe(recipe.getId(), request.getIngredients());
+    }
+
     public void deleteRecipe(String bearerToken, Integer id) throws JSONException {
         Optional<Recipe> optional = recipeRepository.findById(id);
         if(optional.isEmpty()) throw new RecipeNotFoundException(id);

@@ -78,4 +78,9 @@ public class CategoryService {
             }
         }
     }
+
+    public void patchCategories(List<String> categories, Recipe recipe) {
+        categoryRepository.deleteCategoriesByRecipe(recipe);
+        saveCategories(categories, recipe);
+    }
 }

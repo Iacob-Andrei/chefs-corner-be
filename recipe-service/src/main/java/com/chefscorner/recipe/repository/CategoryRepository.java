@@ -22,4 +22,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE lower(trim(c.category)) = lower(trim(?1)) AND c.recipe.id >= 9565")
     List<Recipe> findCategory(String category);
+
+    void deleteCategoriesByRecipe(Recipe recipe);
 }

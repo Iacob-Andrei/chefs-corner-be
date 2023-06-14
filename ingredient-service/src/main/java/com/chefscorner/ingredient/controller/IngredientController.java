@@ -47,6 +47,13 @@ public class IngredientController {
         return ResponseEntity.ok().body("ok");
     }
 
+//    @Operation(summary = "Patch ingredients to recipe.")
+    @PatchMapping("/patch/{idRecipe}")
+    public ResponseEntity<?> patchIngredientsForRecipe(@PathVariable("idRecipe")Integer idRecipe, @RequestBody List<IngredientToRecipeDto> ingredients){
+        ingredientToRecipeService.patchIngredientsNeeded(idRecipe, ingredients);
+        return ResponseEntity.ok().body("ok");
+    }
+
 //    @Operation(summary = "Get recommendation for ingredients.")
     @PostMapping("/recommendation")
     public ResponseEntity<Map<Integer,List<IngredientToRecipeDto>>> getRecommendationWithIngredients(@RequestBody List<Integer> ids){

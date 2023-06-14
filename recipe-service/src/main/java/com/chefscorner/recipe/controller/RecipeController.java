@@ -3,9 +3,7 @@ package com.chefscorner.recipe.controller;
 import com.chefscorner.recipe.dto.PatchDataDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.service.RecipeService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +59,8 @@ public class RecipeController {
 
     @Operation(summary = "Patch a recipe.")
     @PatchMapping("")
-    public ResponseEntity<?> patchRecipe(){
+    public ResponseEntity<?> patchRecipe(@RequestHeader("Authorization") String bearerToken, @RequestBody RecipeDto recipe) throws JSONException {
+        recipeService.patchRecipe(bearerToken, recipe);
         return ResponseEntity.ok().build();
     }
 
