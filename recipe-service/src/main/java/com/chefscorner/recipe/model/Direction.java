@@ -25,10 +25,10 @@ public class Direction {
     private String instruction;
     private String video;
 
-    public Direction(Recipe recipe, Integer order, String instruction) {
+    public Direction(Recipe recipe, Integer order, String instruction, String video) {
         this.recipe = recipe;
         this.step = order;
         this.instruction = instruction;
-        this.video = "";
+        this.video = video;
     }
 }

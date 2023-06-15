@@ -10,6 +10,7 @@ public class DirectionMapper {
                 .id(direction.getId())
                 .order(direction.getStep())
                 .instruction(direction.getInstruction())
+                .video_name(direction.getVideo())
                 .video_data(video)
                 .build();
     }

@@ -25,7 +25,8 @@ public class DirectionService {
             Direction direction = new Direction(
                     recipe,
                     directionDto.getOrder(),
-                    directionDto.getInstruction()
+                    directionDto.getInstruction(),
+                    directionDto.getVideo_name()
             );
             direction.setRecipe(recipe);
             directionRepository.save(direction);
