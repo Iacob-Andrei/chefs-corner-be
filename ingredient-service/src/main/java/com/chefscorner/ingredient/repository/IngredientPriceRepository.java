@@ -12,4 +12,6 @@ import java.util.List;
 public interface IngredientPriceRepository extends JpaRepository<IngredientPrice, Integer> {
     @Query(value = "SELECT distinct (i.ingredient) FROM IngredientPrice i WHERE i.owner = ?1")
     List<Ingredient> findPricesForUser(String owner);
+
+    void deleteIngredientPriceById(Integer id);
 }

@@ -100,6 +100,7 @@ public class IngredientToRecipeService {
         ingredientPriceRepository.save(price);
     }
 
+    @Transactional
     public void deletePriceForIngredientInRecipe(String bearerToken, Integer id) throws JSONException {
         Optional<IngredientPrice> optional = ingredientPriceRepository.findById(id);
         if(optional.isEmpty()) throw new IngredientNotFoundException(id.toString());
@@ -108,7 +109,7 @@ public class IngredientToRecipeService {
         String owner = JwtUtil.getSubjectFromToken(bearerToken);
         if(!price.getOwner().equals(owner)) throw new IngredientNotFoundException(id.toString());
 
-        ingredientPriceRepository.delete(price);
+        ingredientPriceRepository.deleteIngredientPriceById(price.getId());
     }
 
     @Transactional

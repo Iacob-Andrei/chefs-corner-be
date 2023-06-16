@@ -87,7 +87,7 @@ public class MenuService {
         if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(body.getIdRecipe());
 
         RecipeInMenu recipeInMenu = recipeOptional.get();
-        recipeInMenuRepository.deleteById(recipeInMenu.getId());
+        recipeInMenuRepository.delete(recipeInMenu);
     }
 
     public Menu getMenu(Integer idMenu, String owner){
@@ -102,5 +102,12 @@ public class MenuService {
     public void addToMenu(Menu menu, Recipe recipe, String category){
         RecipeInMenu recipeInMenu = new RecipeInMenu(recipe, menu, category);
         recipeInMenuRepository.save(recipeInMenu);
+    }
+
+    public void removeMenu(String bearerToken, Integer idMenu) throws JSONException {
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+        Menu menu = getMenu(idMenu, owner);
+
+        menuRepository.delete(menu);
     }
 }

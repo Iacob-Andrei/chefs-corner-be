@@ -27,6 +27,14 @@ public class MenuController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Delete menu.")
+    @DeleteMapping("/{idMenu}")
+    public ResponseEntity<?> removeMenu(@RequestHeader("Authorization") String bearerToken,
+                                        @PathVariable("idMenu")Integer idMenu) throws JSONException{
+        menuService.removeMenu(bearerToken, idMenu);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "Find menus of owner.")
     @GetMapping("/owned")
     public ResponseEntity<List<MenuDto>> getUsersMenus(@RequestHeader("Authorization") String bearerToken) throws JSONException{
