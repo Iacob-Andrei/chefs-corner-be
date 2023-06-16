@@ -26,8 +26,6 @@ public class Recipe {
     private Integer number_servings;
     private String image;
     private String owner;
-    @Column(columnDefinition = "BLOB")
-    private byte[] image_data;
 
     @OneToMany(
             mappedBy = "recipe",
@@ -50,6 +48,5 @@ public class Recipe {
         this.number_servings = number_servings;
         this.image = "";
         this.owner = owner;
-        this.image_data = new byte[0];
     }
 }

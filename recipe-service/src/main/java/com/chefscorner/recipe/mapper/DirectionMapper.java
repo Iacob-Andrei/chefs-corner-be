@@ -2,16 +2,16 @@ package com.chefscorner.recipe.mapper;
 
 import com.chefscorner.recipe.dto.DirectionDto;
 import com.chefscorner.recipe.model.Direction;
-import com.chefscorner.recipe.util.ImageUtil;
 
 public class DirectionMapper {
 
-    public static DirectionDto directionToDirectionDto(Direction direction){
+    public static DirectionDto directionToDirectionDto(Direction direction, byte[] video){
         return DirectionDto.builder()
                 .id(direction.getId())
                 .order(direction.getStep())
                 .instruction(direction.getInstruction())
-                .video_data(ImageUtil.decompressImage(direction.getVideo_data()))
+                .video_name(direction.getVideo())
+                .video_data(video)
                 .build();
     }
 }

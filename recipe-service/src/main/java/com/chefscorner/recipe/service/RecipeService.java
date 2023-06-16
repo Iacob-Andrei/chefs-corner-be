@@ -1,5 +1,6 @@
 package com.chefscorner.recipe.service;
 
+import com.chefscorner.recipe.dto.PatchDataDto;
 import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.exception.RecipeForbiddenException;
 import com.chefscorner.recipe.exception.RecipeNotFoundException;
@@ -7,19 +8,15 @@ import com.chefscorner.recipe.mapper.RecipeMapper;
 import com.chefscorner.recipe.model.IngredientInRecipe;
 import com.chefscorner.recipe.model.Recipe;
 import com.chefscorner.recipe.repository.RecipeRepository;
-import com.chefscorner.recipe.util.ImageUtil;
 import com.chefscorner.recipe.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,20 +35,33 @@ public class RecipeService {
     public RecipeDto getRecipeById(String bearerToken, Integer idRecipe) throws JSONException {
         Recipe recipe = recipeRepository.findById(idRecipe).orElseThrow(() -> new RecipeNotFoundException(idRecipe));
 
+        String email = JwtUtil.getSubjectFromToken(bearerToken);
         if(!recipe.getOwner().equals("public")){
-            String email = JwtUtil.getSubjectFromToken(bearerToken);
             if(!recipe.getOwner().equals(email) && !webService.getUsersPermissions(email).contains(idRecipe)) {
                 throw new RecipeForbiddenException();
             }
         }
 
         List<IngredientInRecipe> response = webService.getIngredientsForRecipe(idRecipe);
-        return RecipeMapper.recipeToRecipeDto(recipe, response);
+        for(IngredientInRecipe ingredient : response){
+            ingredient.setPrices(
+                    ingredient.getPrices().stream()
+                            .filter(ingredientPrice -> ingredientPrice.getOwner().equals(email))
+                            .collect(Collectors.toList())
+            );
+        }
+
+        return RecipeMapper.recipeToRecipeDto(recipe, response, webService);
     }
 
     public List<RecipeDto> findRecipesByNamePattern(String pattern) {
         List<Recipe> result = recipeRepository.findByNameContainingIgnoreCase(pattern, PageRequest.of(0, 20));
-        return result.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList());
+        return result.stream().map(recipe ->
+                RecipeMapper.recipeToRecipeDtoOnlyInfo(
+                        recipe,
+                        recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+                ))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -72,12 +82,12 @@ public class RecipeService {
         return RecipeDto.builder().id(recipe.getId()).build();
     }
 
-    public void updateRecipeImage(Integer id, MultipartFile image) throws IOException {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-        if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(id);
+    public void updateRecipeImage(PatchDataDto body) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(body.getIdRecipe());
+        if(recipeOptional.isEmpty()) throw new RecipeNotFoundException(body.getIdRecipe());
 
         Recipe recipe = recipeOptional.get();
-        recipe.setImage_data(ImageUtil.compressImage(image.getBytes()));
+        recipe.setImage(body.getImageId());
         recipeRepository.save(recipe);
     }
 
@@ -90,7 +100,31 @@ public class RecipeService {
             optional.ifPresent(result::add);
         }
 
-        return result.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList());
+        return result.stream().map(recipe -> RecipeMapper.recipeToRecipeDtoOnlyInfo(
+                recipe,
+                recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+        )).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void patchRecipe(String bearerToken, RecipeDto request) throws JSONException {
+        Optional<Recipe> optional = recipeRepository.findById(request.getId());
+        if(optional.isEmpty()) throw new RecipeNotFoundException(request.getId());
+
+        Recipe recipe = optional.get();
+        if(!recipe.getOwner().equals(JwtUtil.getSubjectFromToken(bearerToken))){
+            throw new RecipeNotFoundException(request.getId());
+        }
+
+        recipe.setName(request.getName());
+        recipe.setPrep_time(request.getPrep_time());
+        recipe.setCook_time(request.getCook_time());
+        recipe.setNumber_servings(request.getNumber_servings());
+        recipeRepository.save(recipe);
+
+        directionService.patchDirectionRecipes(recipe, request.getDirections());
+        categoryService.patchCategories(request.getCategories(), recipe);
+        webService.patchIngredientsForRecipe(recipe.getId(), request.getIngredients());
     }
 
     public void deleteRecipe(String bearerToken, Integer id) throws JSONException {
@@ -111,7 +145,12 @@ public class RecipeService {
 
         List<RecipeDto> recipeDtoList = new ArrayList<>();
         for(Recipe recipe : response){
-            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(recipe, mapIngredients.get(recipe.getId())));
+            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(
+                    recipe,
+                    mapIngredients.get(recipe.getId()),
+                    recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+                    )
+            );
         }
 
         return recipeDtoList;
@@ -125,7 +164,12 @@ public class RecipeService {
 
         List<RecipeDto> recipeDtoList = new ArrayList<>();
         for(Recipe recipe : response){
-            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(recipe, mapIngredients.get(recipe.getId())));
+            recipeDtoList.add(RecipeMapper.recipeToRecipeDtoWithoutDirections(
+                    recipe,
+                    mapIngredients.get(recipe.getId()),
+                    recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+                    )
+            );
         }
 
         return recipeDtoList;

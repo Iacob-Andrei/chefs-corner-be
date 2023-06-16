@@ -4,6 +4,8 @@ import com.chefscorner.ingredient.dto.IngredientDto;
 import com.chefscorner.ingredient.dto.IngredientToRecipeDto;
 import com.chefscorner.ingredient.model.IngredientToRecipe;
 
+import java.util.stream.Collectors;
+
 public class IngredientToRecipeMapper {
 
     public static IngredientToRecipeDto ingredientToRecipeToIngredientToRecipeDto(IngredientToRecipe ingredient){
@@ -18,6 +20,9 @@ public class IngredientToRecipeMapper {
                 .description(ingredient.getDescription())
                 .unit(ingredient.getUnit())
                 .grams(ingredient.getGrams())
+                .prices(ingredient.getIngredient().getIngredientPrices().stream()
+                        .map(IngredientMapper::priceToPriceDto)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

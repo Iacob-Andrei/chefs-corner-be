@@ -1,10 +1,13 @@
 package com.chefscorner.recipe.dto;
 
 import com.chefscorner.recipe.model.IngredientInRecipe;
+import com.chefscorner.recipe.model.IngredientPrice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +24,7 @@ public class IngredientInRecipeDto {
     private String description;
     private String unit;
     private Double grams;
+    private List<IngredientPrice> prices;
 
     public static IngredientInRecipeDto from(IngredientInRecipe ingredient){
         return IngredientInRecipeDto.builder()
@@ -33,6 +37,7 @@ public class IngredientInRecipeDto {
                 .description(ingredient.getDescription())
                 .unit(ingredient.getUnit())
                 .grams(ingredient.getGrams())
+                .prices(ingredient.getPrices())
                 .build();
     }
 }

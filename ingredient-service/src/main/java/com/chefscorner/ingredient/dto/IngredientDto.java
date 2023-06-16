@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,5 @@ public class IngredientDto {
     private Float price_per_unit;
     private String image;
     private String svg;
+    private List<IngredientPriceDto> prices;
 }

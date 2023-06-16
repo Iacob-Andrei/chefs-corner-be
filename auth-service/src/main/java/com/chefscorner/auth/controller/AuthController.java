@@ -5,6 +5,7 @@ import com.chefscorner.auth.dto.TokenDto;
 import com.chefscorner.auth.dto.UserDto;
 import com.chefscorner.auth.exception.InvalidTokenException;
 import com.chefscorner.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,17 +29,20 @@ public class AuthController {
     private final AuthService service;
     private final AuthenticationManager authenticationManager;
 
+    @Operation(summary = "Register new account.")
     @PostMapping("/register")
     public ResponseEntity<?> addNewUser(@RequestBody UserDto user) {
         service.saveUser(user);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Confirm new account.")
     @GetMapping("/register/confirm")
     public ResponseEntity<String> confirmUser(@RequestParam("token")String token){
         return ResponseEntity.ok().body(service.confirmToken(token));
     }
 
+    @Operation(summary = "Authenticate to account.")
     @PostMapping("/token")
     public ResponseEntity<TokenDto> getToken(@RequestBody AuthRequest authRequest){
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
@@ -51,6 +55,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Validate token authenticity.")
     @GetMapping("/validate")
     public void validateToken(@RequestParam("token")String token){
         service.validateToken(token);

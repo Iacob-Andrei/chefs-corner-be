@@ -1,6 +1,5 @@
 package com.chefscorner.user.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +22,5 @@ public class User {
     private String email;
     private String password;
     private boolean business;
-    @Column(name = "data", columnDefinition = "BLOB")
-    private byte[] data;
+    private String data;
 }

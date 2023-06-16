@@ -14,12 +14,14 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    @Query("SELECT c.recipe FROM Category c WHERE lower(c.category) = COALESCE(:categoryParam, c.category) ORDER BY c.recipe.id")
+    @Query("SELECT c.recipe FROM Category c WHERE lower(c.category) = COALESCE(:categoryParam, c.category) AND c.recipe.id >= 9565 ORDER BY c.recipe.id")
     Page<Recipe> findByCategory(@Param("categoryParam") String categoryParam, Pageable page);
 
-    @Query("SELECT DISTINCT(c.recipe) FROM Category c")
+    @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE c.recipe.id >= 9565")
     Page<Recipe> findByPage(Pageable page);
 
-    @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE lower(trim(c.category)) = lower(trim(?1)) AND c.id <= 9565")
+    @Query("SELECT DISTINCT(c.recipe) FROM Category c WHERE lower(trim(c.category)) = lower(trim(?1)) AND c.recipe.id >= 9565")
     List<Recipe> findCategory(String category);
+
+    void deleteCategoriesByRecipe(Recipe recipe);
 }

@@ -2,23 +2,23 @@ package com.chefscorner.recipe.service;
 
 import com.chefscorner.recipe.dto.CompleteMenuRequest;
 import com.chefscorner.recipe.dto.PageDto;
-import com.chefscorner.recipe.dto.RecipeDto;
 import com.chefscorner.recipe.exception.InvalidNumberPage;
 import com.chefscorner.recipe.mapper.RecipeMapper;
 import com.chefscorner.recipe.model.Category;
-import com.chefscorner.recipe.model.IngredientInRecipe;
+import com.chefscorner.recipe.model.Menu;
 import com.chefscorner.recipe.model.Recipe;
+import com.chefscorner.recipe.model.RecipeInMenu;
 import com.chefscorner.recipe.repository.CategoryRepository;
-import com.chefscorner.recipe.repository.RecipeRepository;
+import com.chefscorner.recipe.util.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
+    private final MenuService menuService;
     private final WebService webService;
 
     public PageDto getRecipesFromCategories(String category, Integer page) {
@@ -43,7 +43,10 @@ public class CategoryService {
         return PageDto.builder()
                 .currentPage(page)
                 .totalPages(slice.getTotalPages()-1)
-                .recipes(recipesInBatch.stream().map(RecipeMapper::recipeToRecipeDtoOnlyInfo).collect(Collectors.toList()))
+                .recipes(recipesInBatch.stream().map( recipe -> RecipeMapper.recipeToRecipeDtoOnlyInfo(
+                        recipe,
+                        recipe.getOwner().equals("public") ? new byte[0] : webService.getFile(recipe.getImage())
+                )).collect(Collectors.toList()))
                 .build();
     }
 
@@ -54,9 +57,12 @@ public class CategoryService {
         }
     }
 
-    public List<RecipeDto> addRecipesToMenu(CompleteMenuRequest currentMenu) {
-        List<Recipe> allRecipesInMenu = currentMenuToListRecipe(currentMenu.getCurrentMenu());
-        List<Integer> ids = new ArrayList<>(allRecipesInMenu.stream().map(Recipe::getId).toList());
+    @Transactional
+    public void addRecipesToMenu(String bearerToken, CompleteMenuRequest currentMenu) throws JSONException {
+        String owner = JwtUtil.getSubjectFromToken(bearerToken);
+        Menu menu = menuService.getMenu(currentMenu.getIdMenu(), owner);
+
+        List<Recipe> allRecipesInMenu = menu.getRecipes().stream().map(RecipeInMenu::getRecipe).toList();
 
         for(String category : currentMenu.getRequested().keySet()){
             List<Recipe> recipesInCategory = categoryRepository.findCategory(category);
@@ -67,31 +73,14 @@ public class CategoryService {
                 Collections.shuffle(recipesInCategory);
                 Recipe recipe = recipesInCategory.remove(0);
 
-                Category cat = recipe.getCategories().stream().filter(category1 -> category1.getCategory().equals(category)).findFirst().orElse(null);
-                recipe.getCategories().remove(cat);
-                recipe.getCategories().add(0, cat);
-
-                allRecipesInMenu.add(recipe);
+                menuService.addToMenu(menu, recipe, category);
                 added++;
-                ids.add(recipe.getId());
             }
         }
-
-        Map<Integer, List<IngredientInRecipe>> ingredients = webService.getIngredientsForRecipes(ids);
-        return allRecipesInMenu.stream().map(recipe -> RecipeMapper.recipeToRecipeDtoWithoutDirections(recipe, ingredients.get(recipe.getId()))).collect(Collectors.toList());
     }
 
-    private List<Recipe> currentMenuToListRecipe(Map<String,List<Integer>> currentMenu){
-        List<Recipe> allRecipesInMenu = new ArrayList<>();
-        for(String category : currentMenu.keySet()){
-            for(Integer idRecipe : currentMenu.get(category)){
-                Recipe recipe = recipeRepository.getReferenceById(idRecipe);
-                Category cat = recipe.getCategories().stream().filter(category1 -> category1.getCategory().equals(category)).findFirst().orElse(null);
-                recipe.getCategories().remove(cat);
-                recipe.getCategories().add(0, cat);
-                allRecipesInMenu.add(recipe);
-            }
-        }
-        return allRecipesInMenu;
+    public void patchCategories(List<String> categories, Recipe recipe) {
+        categoryRepository.deleteCategoriesByRecipe(recipe);
+        saveCategories(categories, recipe);
     }
 }
