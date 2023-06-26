@@ -71,6 +71,9 @@ public class AuthService {
 
     public void isConfirmed(String email) {
         User user = repository.findByEmail(email).get();
-        if(!user.isConfirmed()) throw new EmailNotConfirmedException();
+        if(!user.isConfirmed()) {
+            confirmationTokenService.saveConfirmationToken(user);
+            throw new EmailNotConfirmedException();
+        }
     }
 }

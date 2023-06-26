@@ -68,8 +68,18 @@ public class IngredientToRecipeService {
     }
 
     public Map<Integer,List<IngredientToRecipeDto>> getRecipesByIngredients(List<Integer> ids) {
-        //TODO: de adaugat
         List<Integer> result = ingredientToRecipeRepository.findRecipesContainingIngredients(ids, ids.size());
+
+        if(result.size() == 0){
+            System.out.println("cu 0");
+            for(Integer id : ids){
+                List<Integer> removedList = new ArrayList<>(ids);
+                removedList.remove(Integer.valueOf(id));
+                result.addAll(ingredientToRecipeRepository.findRecipesContainingIngredients(removedList, removedList.size()));
+                if(result.size() > 10) break;
+            }
+        }
+
         Collections.shuffle(result);
         int max = Math.min(result.size(), 10);
         return this.getIngredientsByIdsRecipes(result.subList(0,max));
